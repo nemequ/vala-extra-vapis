@@ -31,4 +31,13 @@ your source tree.
 == Submitting Bindings For Inclusion ==
 
 If you have bindings which you would like to see housed in this
-repository, simply submit a request.
+repository, simply submit a request via our issue tracker on github
+(https://github.com/nemequ/vala-extra-vapis/issues) or, even better, a
+pull request.
+
+== Documentation and Tests ==
+
+In order to keep the vala-extra-vapis repository small all tests,
+examples, documentation, and other supplementary material is hosted in
+a different repository, "vala-extra-vapis-supplemental", located at
+https://github.com/nemequ/vala-extra-vapis-supplemental
