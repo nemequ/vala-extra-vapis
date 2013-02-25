@@ -2,7 +2,7 @@
  *
  * Copyright:
  *   2008 Jiqing Qiang
- *   2008, 2010, 2012 Evan Nemerson
+ *   2008, 2010, 2012-2013 Evan Nemerson
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -442,10 +442,10 @@ namespace GCrypt {
 		public ErrorSource source ();
 
 		[CCode (cname = "gcry_strerror")]
-		public weak string to_string ();
+		public unowned string to_string ();
 
 		[CCode (cname = "gcry_strsource")]
-		public weak string source_to_string ();
+		public unowned string source_to_string ();
 	}
 
 	[CCode (cname = "enum gcry_ctl_cmds", cprefix = "GCRYCTL_")]
@@ -534,7 +534,7 @@ namespace GCrypt {
 			[CCode (cname = "gcry_cipher_algo_info")]
 			public Error info (ControlCommand what, ref uchar[] buffer);
 			[CCode (cname = "gcry_cipher_algo_name")]
-			public weak string to_string ();
+			public unowned string to_string ();
 			[CCode (cname = "gcry_cipher_map_name")]
 			public static Algorithm from_string (string name);
 			[CCode (cname = "gcry_cipher_map_oid")]
@@ -596,17 +596,21 @@ namespace GCrypt {
 			SHA256,
 			SHA384,
 			SHA512,
+			SHA224,
 			MD4,
 			CRC32,
 			CRC32_RFC1510,
-			CRC24_RFC2440;
+			CRC24_RFC2440,
+			WHIRLPOOL,
+			TIGER1,
+			TIGER2;
 			
 			[CCode (cname = "gcry_md_get_algo_dlen")]
 			public size_t get_digest_length ();
 			[CCode (cname = "gcry_md_algo_info")]
 			public Error info (ControlCommand what, ref uchar[] buffer);
 			[CCode (cname = "gcry_md_algo_name")]
-			public weak string to_string ();
+			public unowned string to_string ();
 			[CCode (cname = "gcry_md_map_name")]
 			public static Algorithm from_string (string name);
 			[CCode (cname = "gcry_md_test_algo")]
@@ -659,8 +663,7 @@ namespace GCrypt {
 		public static void randomize (uchar[] buffer, Level level = Level.VERY_STRONG);
 		[CCode (cname = "gcry_fast_random_poll")]
 		public static Error poll ();
-		[CCode (array_length = false)]
-		[CCode (cname = "gcry_random_bytes")]
+		[CCode (cname = "gcry_random_bytes", array_length = false)]
 		public static uchar[] random_bytes (size_t nbytes, Level level = Level.VERY_STRONG);
 		[CCode (cname = "gcry_random_bytes_secure")]
 		public static uchar[] random_bytes_secure (size_t nbytes, Level level = Level.VERY_STRONG);
@@ -751,7 +754,7 @@ namespace GCrypt {
 		public SExp find_token (string token, size_t token_length = 0);
 		public int length ();
 		public SExp? nth (int number);
-		public SExp? car ();  
+		public SExp? car ();
 		public SExp? cdr ();
 		public unowned char[] nth_data (int number);
 		public gcry_string nth_string (int number);
@@ -784,5 +787,20 @@ namespace GCrypt {
 		public static Error testkey (SExp key);
 		public static Error genkey (out SExp r_key, SExp s_params);
 		public static uint get_nbits (SExp key);
+	}
+
+	[CCode (lower_case_cprefix = "gcry_kdf_")]
+	namespace KeyDerivation {
+		[CCode (cname = "gcry_kdf_algos", cprefix = "GCRY_KDF_", has_type_id = false)]
+		public enum Algorithm {
+			NONE,
+			SIMPLE_S2K,
+			SALTED_S2K,
+			ITERSALTED_S2K,
+			PBKDF1,
+			PBKDF2
+		}
+
+		public GCrypt.Error derive ([CCode (type = "const void*", array_length_type = "size_t")] uint8[] passphrasse, GCrypt.KeyDerivation.Algorithm algo, GCrypt.Hash.Algorithm subalgo, [CCode (type = "const void*", array_length_type = "size_t")] uint8[] salt, ulong iterations, [CCode (type = "void*", array_length_type = "size_t", array_length_pos = 5.5)] uint8[] keybuffer);
 	}
 }
