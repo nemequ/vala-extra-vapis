@@ -32,7 +32,7 @@ namespace UcharDet {
 		[CCode (cname = "uchardet_new", cheader_filename = "uchardet/uchardet.h")]
 		public Classifier ();
 		[CCode (cname = "uchardet_handle_data", cheader_filename = "uchardet/uchardet.h")]
-		public int handle_data (uint8* buffer, size_t size);
+		public int handle_data ([CCode (array_length_type = "size_t")] uint8[] buffer);
 		[CCode (cname = "uchardet_data_end", cheader_filename = "uchardet/uchardet.h")]
 		public void data_end ();
 		[CCode (cname = "uchardet_reset", cheader_filename = "uchardet/uchardet.h")]
