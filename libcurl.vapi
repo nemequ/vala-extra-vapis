@@ -180,7 +180,7 @@ namespace Curl {
 	[Compact]
 	public class SList {
 		[CCode (cname = "curl_slist_append")]
-		public static SList append (SList? p1, string p2);
+		public static SList append (owned SList? p1, string p2);
 		[CCode (cname = "curl_slist_free_all")]
 		public void free_all ();
 	}
