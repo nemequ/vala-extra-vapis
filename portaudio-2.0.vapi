@@ -116,7 +116,7 @@ namespace PortAudio {
   public class HostApiInfo {
   
     [CCode (cname = "Pa_GetHostApiInfo")]
-    public HostApiInfo(HostApiIndex host_api); 
+    public static unowned HostApiInfo get(HostApiIndex host_api);
   
     [CCode (cname = "structVersion")]
     public int version;
@@ -144,7 +144,7 @@ namespace PortAudio {
   public class DeviceInfo {
   
     [CCode (cname = "Pa_GetDeviceInfo")]
-    public DeviceInfo(DeviceIndex device);
+    public static unowned DeviceInfo get(DeviceIndex device);
   
     [CCode (cname = "structVersion")]
     public int version;  
@@ -173,8 +173,7 @@ namespace PortAudio {
   [CCode (free_function = "Pa_CloseStream")]
   public class Stream {
   
-    [Compact]
-    public class Parameters {
+    public struct Parameters {
       public DeviceIndex device;
       [CCode (cname = "channelCount")]
       public int channel_count;
@@ -278,8 +277,8 @@ namespace PortAudio {
 
     [CCode (cname = "Pa_OpenStream")]
     public static Error open(out Stream stream,
-                              Stream.Parameters input_parameters,
-                              Stream.Parameters output_parameters,
+                              Stream.Parameters* input_parameters,
+                              Stream.Parameters* output_parameters,
                               double sample_rate,
                               ulong frames_per_buffer,
                               Flags stream_flags,
@@ -337,8 +336,8 @@ namespace PortAudio {
 
 
   [CCode (cname = "Pa_IsFormatSupported")]
-  public Error is_format_supported(Stream.Parameters input_parameters,
-                                   Stream.Parameters output_parameters,
+  public Error is_format_supported(Stream.Parameters* input_parameters,
+                                   Stream.Parameters* output_parameters,
                                    double sample_rate);
   
   [CCode (cname = "Pa_GetSampleSize")]
