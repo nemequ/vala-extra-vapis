@@ -40,8 +40,15 @@ namespace Xcb {
 		public int get_file_descriptor ();
 		public Xcb.GenericError? request_check (Xcb.VoidCookie cookie);
 
-		public VoidCookie create_window (uint8 depth, Window wid, Window parent, int16 x, int16 y, uint16 width, uint16 height, uint16 border_width, uint16 _class, VisualID visual, uint32 value_mask, [CCode (array_length = false)] uint32[]? value_list);
-		public VoidCookie create_window_checked (uint8 depth, Window wid, Window parent, int16 x, int16 y, uint16 width, uint16 height, uint16 border_width, uint16 _class, VisualID visual, uint32 value_mask, [CCode (array_length = false)] uint32[]? value_list);
+		public VoidCookie create_window_checked (uint8 depth, Window window, Window parent, int16 x, int16 y, uint16 width, uint16 height, uint16 border_width, uint16 _class, VisualID visual, CW value_mask, [CCode (array_length = false)] uint32[]? value_list);
+		public VoidCookie create_window (uint8 depth, Window window, Window parent, int16 x, int16 y, uint16 width, uint16 height, uint16 border_width, uint16 _class, VisualID visual, CW value_mask, [CCode (array_length = false)] uint32[]? value_list);
+
+		public VoidCookie change_window_attributes_checked (Window window, CW value_mask, [CCode (array_length = false)] uint32[]? value_list);
+		public VoidCookie change_window_attributes (Window window, CW value_mask, [CCode (array_length = false)] uint32[]? value_list);
+
+		public GetWindowAttributesCookie get_window_attributes (Window window);
+		public GetWindowAttributesCookie get_window_attributes_unchecked (Window window);
+		public GetWindowAttributesReply? get_window_attributes_reply (GetWindowAttributesCookie cookie, out GenericError? e = null);
 
 		public VoidCookie destroy_window_checked (Window window);
 		public VoidCookie destroy_window (Window window);
@@ -52,30 +59,33 @@ namespace Xcb {
 		public VoidCookie change_save_set_checked (SetMode mode, Window window);
 		public VoidCookie change_save_set (SetMode mode, Window window);
 
-		public VoidCookie map_window (Window wid);
-		public VoidCookie map_window_checked (Window wid);
+		public VoidCookie reparent_window_checked (Window window, Window parent, uint16 x, uint16 y);
+		public VoidCookie reparent_window (Window window, Window parent, uint16 x, uint16 y);
+
+		public VoidCookie map_window_checked (Window window);
+		public VoidCookie map_window (Window window);
 
 		public VoidCookie map_subwindows_checked (Window window);
 		public VoidCookie map_subwindows (Window window);
 
-		public VoidCookie unmap_window (Window wid);
-		public VoidCookie unmap_window_checked (Window wid);
+		public VoidCookie unmap_window_checked (Window window);
+		public VoidCookie unmap_window (Window window);
 
 		public VoidCookie unmap_subwindows_checked (Window window);
 		public VoidCookie unmap_subwindows (Window window);
 
+		public VoidCookie configure_window_checked (Window window, ConfigWindow value_mask, [CCode (array_length = false)] uint32[] value_list);
+		public VoidCookie configure_window (Window window, ConfigWindow value_mask, [CCode (array_length = false)] uint32[] value_list);
+
 		public VoidCookie circulate_window_checked (Circulate direction, Window window);
 		public VoidCookie circulate_window (Circulate direction, Window window);
 
-		public GetWindowAttributesCookie get_window_attributes (Window window);
-		public GetWindowAttributesCookie get_window_attributes_unchecked (Window window);
-		public GetWindowAttributesReply? get_window_attributes_reply (GetWindowAttributesCookie cookie, out GenericError? e = null);
+		public GetGeometryCookie get_geometry (Drawable drawable);
+		public GetGeometryCookie get_geometry_unchecked (Drawable drawable);
+		public GetGeometryReply? get_geometry_reply (GetGeometryCookie cookie, out GenericError? e = null);
 
-		public VoidCookie change_window_attributes_checked (Window window, CW value_mask, [CCode (array_length = false)] uint32[]? value_list);
-		public VoidCookie change_window_attributes (Window window, CW value_mask, [CCode (array_length = false)] uint32[]? value_list);
-
-		public QueryTreeCookie query_tree (Window wid);
-		public QueryTreeCookie query_tree_unchecked (Window wid);
+		public QueryTreeCookie query_tree (Window window);
+		public QueryTreeCookie query_tree_unchecked (Window window);
 		public QueryTreeReply? query_tree_reply (QueryTreeCookie cookie, out GenericError? e = null);
 
 		[CCode (cname = "xcb_intern_atom")]
@@ -144,16 +154,6 @@ namespace Xcb {
 		public ListPropertiesCookie list_properties (Window window);
 		public ListPropertiesCookie list_properties_unchecked (Window window);
 		public ListPropertiesReply? list_properties_reply (ListPropertiesCookie cookie, out GenericError? e = null);
-
-		public VoidCookie configure_window_checked (Window window, ConfigWindow value_mask, [CCode (array_length = false)] uint32[] value_list);
-		public VoidCookie configure_window (Window window, ConfigWindow value_mask, [CCode (array_length = false)] uint32[] value_list);
-
-		public VoidCookie reparent_window (Window window, Window parent, uint16 x, uint16 y);
-		public VoidCookie reparent_window_checked (Window window, Window parent, uint16 x, uint16 y);
-
-		public GetGeometryCookie get_geometry (Drawable drawable);
-		public GetGeometryCookie get_geometry_unchecked (Drawable drawable);
-		public GetGeometryReply? get_geometry_reply (GetGeometryCookie cookie, out GenericError ? e);
 
 		public VoidCookie set_selection_owner_checked (Window owner, AtomT selection, Timestamp time);
 		public VoidCookie set_selection_owner (Window owner, AtomT selection, Timestamp time);
@@ -571,20 +571,8 @@ namespace Xcb {
 	}
 
 	[SimpleType]
-	[IntegerType (rank = 9)]
-	[CCode (cname = "xcb_get_geometry_cookie_t", has_type_id = false)]
-	public struct GetGeometryCookie {
-	}
-
-	[CCode (cname = "xcb_get_geometry_reply_t", ref_function = "", unref_function = "free")]
-	public class GetGeometryReply : GenericReply {
-		public uint8 depth;
-		public Window root;
-		public int16 x;
-		public int16 y;
-		public uint16 width;
-		public uint16 height;
-		public uint16 border_width;
+	[CCode (cname = "xcb_void_cookie_t", has_type_id = false)]
+	public struct VoidCookie {
 	}
 
 	[SimpleType]
@@ -615,19 +603,41 @@ namespace Xcb {
 
 	[SimpleType]
 	[IntegerType (rank = 9)]
-	[CCode (cname = "xcb_get_property_cookie_t", has_type_id = false)]
-	public struct GetPropertyCookie {
+	[CCode (cname = "xcb_get_geometry_cookie_t", has_type_id = false)]
+	public struct GetGeometryCookie {
+	}
+
+	[CCode (cname = "xcb_get_geometry_reply_t", ref_function = "", unref_function = "free")]
+	public class GetGeometryReply : GenericReply {
+		public uint8 depth;
+		public Window root;
+		public int16 x;
+		public int16 y;
+		public uint16 width;
+		public uint16 height;
+		public uint16 border_width;
+	}
+
+	[SimpleType]
+	[CCode (cname = "xcb_query_tree_cookie_t", has_type_id = false)]
+	public struct QueryTreeCookie {
 	}
 
 	[Compact]
-	[CCode (cname = "xcb_get_property_reply_t", ref_function = "", unref_function = "free")]
-	public class GetPropertyReply {
-		public uint8 format;
-		public AtomT type;
-		[CCode (cname = "xcb_get_property_value_length")]
-		public int32 value_length ();
-		[CCode (cname = "xcb_get_property_value")]
-		public unowned void *value ();
+	[CCode (cname = "xcb_query_tree_reply_t", ref_function = "", unref_function = "")]
+	public class QueryTreeReply : GenericReply {
+		public Window root;
+		public Window parent;
+		private uint16 children_len;
+		[CCode (cname = "xcb_query_tree_children", array_length = false)]
+		private Window* vala_children ();
+		public unowned Window[] children {
+			get {
+				unowned Window[] res = (Window[]) vala_children ();
+				res.length = children_len;
+				return res;
+			}
+		}
 	}
 
 	[SimpleType]
@@ -655,6 +665,45 @@ namespace Xcb {
 		[CCode (cname = "xcb_get_atom_name_name")]
 		private unowned string vala_name ();
 		public string name { owned get { return "%.*s".printf (name_len, vala_name ()); } }
+	}
+
+	[SimpleType]
+	[IntegerType (rank = 9)]
+	[CCode (cname = "xcb_get_property_cookie_t", has_type_id = false)]
+	public struct GetPropertyCookie {
+	}
+
+	[Compact]
+	[CCode (cname = "xcb_get_property_reply_t", ref_function = "", unref_function = "free")]
+	public class GetPropertyReply : GenericReply {
+		public uint8 format;
+		public AtomT type;
+		public uint32 bytes_after;
+		private uint32 value_len;
+		[CCode (cname = "xcb_get_property_value")]
+		public unowned void *value ();
+		public string value_as_string () {
+			GLib.assert (format == 8);
+			return "%.*s".printf (value_len, value ());
+		}
+		public unowned uint8[] value_as_uint8_array () {
+			GLib.assert (format == 8);
+			unowned uint8[] res = (uint8[]) value ();
+			res.length = (int) value_len;
+			return res;
+		}
+		public unowned uint16[] value_as_uint16_array () {
+			GLib.assert (format == 16);
+			unowned uint16[] res = (uint16[]) value ();
+			res.length = (int) value_len;
+			return res;
+		}
+		public unowned uint32[] value_as_uint32_array () {
+			GLib.assert (format == 32);
+			unowned uint32[] res = (uint32[]) value ();
+			res.length = (int) value_len;
+			return res;
+		}
 	}
 
 	[SimpleType]
@@ -1246,45 +1295,6 @@ namespace Xcb {
 				}
 				return value;
 			}
-		}
-	}
-
-	[SimpleType]
-	[IntegerType (rank = 9)]
-	[CCode (cname = "xcb_get_property_cookie_t", has_type_id = false)]
-	public struct GetPropertyCookie {
-	}
-
-	[Compact]
-	[CCode (cname = "xcb_get_property_reply_t", ref_function = "", unref_function = "free")]
-	public class GetPropertyReply : GenericReply {
-		public uint8 format;
-		public AtomT type;
-		public uint32 bytes_after;
-		private uint32 value_len;
-		[CCode (cname = "xcb_get_property_value")]
-		public unowned void *value ();
-		public string value_as_string () {
-			GLib.assert (format == 8);
-			return "%.*s".printf (value_len, value ());
-		}
-		public unowned uint8[] value_as_uint8_array () {
-			GLib.assert (format == 8);
-			unowned uint8[] res = (uint8[]) value ();
-			res.length = (int) value_len;
-			return res;
-		}
-		public unowned uint16[] value_as_uint16_array () {
-			GLib.assert (format == 16);
-			unowned uint16[] res = (uint16[]) value ();
-			res.length = (int) value_len;
-			return res;
-		}
-		public unowned uint32[] value_as_uint32_array () {
-			GLib.assert (format == 32);
-			unowned uint32[] res = (uint32[]) value ();
-			res.length = (int) value_len;
-			return res;
 		}
 	}
 
@@ -2123,23 +2133,6 @@ namespace Xcb {
 		public VisualTypeIterator visuals_iterator ();
 	}
 
-	[Compact]
-	[CCode (cname = "xcb_query_tree_reply_t", ref_function = "", unref_function = "")]
-	public class QueryTreeReply : GenericReply {
-		public Window root;
-		public Window parent;
-		private uint16 children_len;
-		[CCode (cname = "xcb_query_tree_children", array_length = false)]
-		private Window* vala_children ();
-		public unowned Window[] children {
-			get {
-				unowned Window[] res = (Window[]) vala_children ();
-				res.length = children_len;
-				return res;
-			}
-		}
-	}
-
 	[SimpleType]
 	[CCode (cname = "xcb_depth_iterator_t", has_type_id = false)]
 	public struct DepthIterator {
@@ -2164,17 +2157,7 @@ namespace Xcb {
 	[Deprecated (since = "vala-0.14", replacement = "Xcb.Connection.create_window")]
 	public VoidCookie create_window (Connection connection, uint8 depth, Window window, Window parent, int16 x, int16 y, uint16 width, uint16 height, uint16 border_width, uint16 _class, VisualID visual, uint32 value_mask, [CCode (array_length = false)] uint32[] value_list);
 	[Deprecated (since = "vala-0.14", replacement = "Xcb.Connection.map_window")]
-	public VoidCookie map_window (Connection connection, Window wid);
-
-	[SimpleType]
-	[CCode (cname = "xcb_void_cookie_t", has_type_id = false)]
-	public struct VoidCookie {
-	}
-
-	[SimpleType]
-	[CCode (cname = "xcb_query_tree_cookie_t", has_type_id = false)]
-	public struct QueryTreeCookie {
-	}
+	public VoidCookie map_window (Connection connection, Window window);
 
 	[CCode (cname = "xcb_point_t", has_type_id = false)]
 	public struct Point {
