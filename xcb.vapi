@@ -22,7 +22,7 @@
  *  Sergio Costas <raster@rastersoft.com>
  */
 
-[CCode (lower_case_cprefix = "xcb_", cheader_filename = "xcb/xcb.h,xcb/xproto.h")]
+[CCode (cprefix = "xcb_", cheader_filename = "xcb/xcb.h,xcb/xproto.h")]
 namespace Xcb {
 	[Compact]
 	[CCode (cname = "xcb_connection_t", cprefix = "xcb_", ref_function = "", unref_function = "xcb_disconnect")]
@@ -2494,5 +2494,104 @@ namespace Xcb {
 		public int index;
 		[CCode (cname = "xcb_fontprop_next")]
 		public static void next (ref FontpropIterator iter);
+	}
+
+	[CCode (cprefix = "xcb_big_requests_", cheader_filename = "xcb/bigreq.h")]
+	namespace BigRequests {
+		public static Connection get_connection (Xcb.Connection c) {
+			return (Connection) c;
+		}
+
+		[Compact]
+		[CCode (cname = "xcb_connection_t", cprefix = "xcb_big_requests_", unref_function = "")]
+		public class Connection : Xcb.Connection {
+			public EnableCookie enable ();
+			public EnableCookie enable_unchecked ();
+			public EnableReply? enable_reply (EnableCookie cookie, out GenericError? e = null);
+		}
+
+		[SimpleType]
+		[IntegerType (rank = 9)]
+		[CCode (cname = "xcb_big_requests_enable_cookie_t", has_type_id = false)]
+		public struct EnableCookie {
+		}
+
+		[Compact]
+		[CCode (cname = "xcb_big_requests_enable_reply_t", ref_function = "", unref_function = "free")]
+		public class EnableReply : GenericReply {
+			public uint32 maximum_request_length;
+		}
+	}
+
+	[CCode (cprefix = "xcb_xc_misc_", cheader_filename = "xcb/xc_misc.h")]
+	namespace XCMisc {
+		public static Connection get_connection (Xcb.Connection c) {
+			return (Connection) c;
+		}
+
+		[Compact]
+		[CCode (cname = "xcb_connection_t", cprefix = "xcb_xc_misc_", unref_function = "")]
+		public class Connection : Xcb.Connection {
+			public GetVersionCookie get_version (uint16 client_major_version, uint16 client_minor_version);
+			public GetVersionCookie get_version_unchecked (uint16 client_major_version, uint16 client_minor_version);
+			public GetVersionReply? get_version_reply (GetVersionCookie cookie, out GenericError? e = null);
+
+			public GetXIDRangeCookie get_xid_range ();
+			public GetXIDRangeCookie get_xid_range_unchecked ();
+			public GetXIDRangeReply? get_xid_range_reply (GetXIDRangeCookie cookie, out GenericError? e = null);
+
+			public GetXIDListCookie get_xid_list (uint32 count);
+			public GetXIDListCookie get_xid_list_unchecked (uint32 count);
+			public GetXIDListReply? get_xid_list_reply (GetXIDListCookie cookie, out GenericError? e = null);
+		}
+
+		[SimpleType]
+		[IntegerType (rank = 9)]
+		[CCode (cname = "xcb_xc_misc_get_version_cookie_t", has_type_id = false, cheader_filename = "xcb/xc_misc.h")]
+		public struct GetVersionCookie {
+		}
+
+		[Compact]
+		[CCode (cname = "xcb_xc_misc_get_version_reply_t", ref_function = "", unref_function = "free", cheader_filename = "xcb/xc_misc.h")]
+		public class GetVersionReply : GenericReply {
+			public uint32 server_major_version;
+			public uint32 server_minor_version;
+		}
+
+		[SimpleType]
+		[IntegerType (rank = 9)]
+		[CCode (cname = "xcb_xc_misc_get_xid_range_cookie_t", has_type_id = false, cheader_filename = "xcb/xc_misc.h")]
+		public struct GetXIDRangeCookie {
+		}
+
+		[Compact]
+		[CCode (cname = "xcb_xc_misc_get_xid_range_reply_t", ref_function = "", unref_function = "free", cheader_filename = "xcb/xc_misc.h")]
+		public class GetXIDRangeReply : GenericReply {
+			public uint32 start_id;
+			public uint32 count;
+		}
+
+		[SimpleType]
+		[IntegerType (rank = 9)]
+		[CCode (cname = "xcb_xc_misc_get_xid_list_cookie_t", has_type_id = false, cheader_filename = "xcb/xc_misc.h")]
+		public struct GetXIDListCookie {
+		}
+
+		[Compact]
+		[CCode (cname = "xcb_xc_misc_get_xid_list_reply_t", ref_function = "", unref_function = "free", cheader_filename = "xcb/xc_misc.h")]
+		public class GetXIDListReply : GenericReply {
+			private uint32 ids_len;
+			[CCode (cname = "xcb_xc_misc_get_xid_list_ids")]
+			private uint32* vala_ids ();
+			public unowned uint32[] ids
+			{
+				get
+				{
+					unowned uint32[] res = (uint32[]) vala_ids ();
+					res.length = (int) ids_len;
+					return res;
+				}
+			}
+		}
 	}
 }
