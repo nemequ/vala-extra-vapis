@@ -102,68 +102,68 @@ namespace Xcb {
 		}
 		public InternAtomReply? intern_atom_reply (InternAtomCookie cookie, out GenericError? e = null);
 
-		public GetAtomNameCookie get_atom_name (AtomT atom);
-		public GetAtomNameCookie get_atom_name_unchecked (AtomT atom);
+		public GetAtomNameCookie get_atom_name (Atom atom);
+		public GetAtomNameCookie get_atom_name_unchecked (Atom atom);
 		public GetAtomNameReply? get_atom_name_reply (GetAtomNameCookie cookie, out GenericError? e = null);
 
 		[CCode (cname = "xcb_change_property")]
-		private VoidCookie vala_change_property (PropMode mode, Window window, AtomT property, AtomT type, uint8 format, uint32 len, void *data);
+		private VoidCookie vala_change_property (PropMode mode, Window window, Atom property, Atom type, uint8 format, uint32 len, void *data);
 		[CCode (cname = "vala_xcb_change_property")]
-		public VoidCookie change_property_uint8 (PropMode mode, Window window, AtomT property, AtomT type, uint32 len, uint8 *data) {
+		public VoidCookie change_property_uint8 (PropMode mode, Window window, Atom property, Atom type, uint32 len, uint8 *data) {
 			return this.vala_change_property (mode, window, property, type, 8, len, (void *)data);
 		}
-		public VoidCookie change_property_uint16 (PropMode mode, Window window, AtomT property, AtomT type, uint32 len, uint16 *data) {
+		public VoidCookie change_property_uint16 (PropMode mode, Window window, Atom property, Atom type, uint32 len, uint16 *data) {
 			return this.vala_change_property (mode, window, property, type, 16, len, (void *)data);
 		}
-		public VoidCookie change_property_uint32 (PropMode mode, Window window, AtomT property, AtomT type, uint32 len, uint32 *data) {
+		public VoidCookie change_property_uint32 (PropMode mode, Window window, Atom property, Atom type, uint32 len, uint32 *data) {
 			return this.vala_change_property (mode, window, property, type, 32, len, (void *)data);
 		}
-		public VoidCookie change_property_atom (PropMode mode, Window window, AtomT property, AtomT type, uint32 len, AtomT *data) {
+		public VoidCookie change_property_atom (PropMode mode, Window window, Atom property, Atom type, uint32 len, Atom *data) {
 			return this.vala_change_property (mode, window, property, type, 32, len, (void *)data);
 		}
-		public VoidCookie change_property_string (PropMode mode, Window window, AtomT property, AtomT type, string data) {
+		public VoidCookie change_property_string (PropMode mode, Window window, Atom property, Atom type, string data) {
 			return this.vala_change_property (mode, window, property, type, 8, data.length, (void *)data.data);
 		}
 
 		[CCode (cname = "xcb_change_property_checked")]
-		private VoidCookie vala_change_property_checked (PropMode mode, Window window, AtomT property, AtomT type, uint8 format, uint32 len, void *data);
+		private VoidCookie vala_change_property_checked (PropMode mode, Window window, Atom property, Atom type, uint8 format, uint32 len, void *data);
 		[CCode (cname = "vala_xcb_change_property_checked")]
-		public VoidCookie change_property_checked_uint8 (PropMode mode, Window window, AtomT property, AtomT type, uint32 len, uint8 *data) {
-			return this.vala_change_property (mode, window, property, type, 8, len, (void *)data);
+		public VoidCookie change_property_checked_uint8 (PropMode mode, Window window, Atom property, Atom type, uint32 len, uint8 *data) {
+			return this.vala_change_property (mode, window, property, type, 8, len, (void *) data);
 		}
-		public VoidCookie change_property_checked_uint16 (PropMode mode, Window window, AtomT property, AtomT type, uint32 len, uint16 *data) {
-			return this.vala_change_property (mode, window, property, type, 16, len, (void *)data);
+		public VoidCookie change_property_checked_uint16 (PropMode mode, Window window, Atom property, Atom type, uint32 len, uint16 *data) {
+			return this.vala_change_property (mode, window, property, type, 16, len, (void *) data);
 		}
-		public VoidCookie change_property_checked_uint32 (PropMode mode, Window window, AtomT property, AtomT type, uint32 len, uint32 *data) {
-			return this.vala_change_property (mode, window, property, type, 32, len, (void *)data);
+		public VoidCookie change_property_checked_uint32 (PropMode mode, Window window, Atom property, Atom type, uint32 len, uint32 *data) {
+			return this.vala_change_property (mode, window, property, type, 32, len, (void *) data);
 		}
-		public VoidCookie change_property_checked_atom (PropMode mode, Window window, AtomT property, AtomT type, uint32 len, AtomT *data) {
-			return this.vala_change_property (mode, window, property, type, 32, len, (void *)data);
+		public VoidCookie change_property_checked_atom (PropMode mode, Window window, Atom property, Atom type, uint32 len, Atom *data) {
+			return this.vala_change_property (mode, window, property, type, 32, len, (void *) data);
 		}
-		public VoidCookie change_property_checked_string (PropMode mode, Window window, AtomT property, AtomT type, string data) {
-			return this.vala_change_property (mode, window, property, type, 8, data.length, (void *)data.data);
+		public VoidCookie change_property_checked_string (PropMode mode, Window window, Atom property, Atom type, string data) {
+			return this.vala_change_property (mode, window, property, type, 8, data.length, (void *) data.data);
 		}
 
-		public VoidCookie delete_property_checked (Window window, AtomT property);
-		public VoidCookie delete_property (Window window, AtomT property);
+		public VoidCookie delete_property_checked (Window window, Atom property);
+		public VoidCookie delete_property (Window window, Atom property);
 
-		public GetPropertyCookie get_property (bool _delete, Window window, AtomT property, AtomT type, uint32 long_offset, uint32 long_length);
-		public GetPropertyCookie get_property_unchecked (bool _delete, Window window, AtomT property, AtomT type, uint32 long_offset, uint32 long_length);
+		public GetPropertyCookie get_property (bool _delete, Window window, Atom property, Atom type, uint32 long_offset, uint32 long_length);
+		public GetPropertyCookie get_property_unchecked (bool _delete, Window window, Atom property, Atom type, uint32 long_offset, uint32 long_length);
 		public GetPropertyReply? get_property_reply (GetPropertyCookie cookie, out GenericError? e = null);
 
 		public ListPropertiesCookie list_properties (Window window);
 		public ListPropertiesCookie list_properties_unchecked (Window window);
 		public ListPropertiesReply? list_properties_reply (ListPropertiesCookie cookie, out GenericError? e = null);
 
-		public VoidCookie set_selection_owner_checked (Window owner, AtomT selection, Timestamp time);
-		public VoidCookie set_selection_owner (Window owner, AtomT selection, Timestamp time);
+		public VoidCookie set_selection_owner_checked (Window owner, Atom selection, Timestamp time);
+		public VoidCookie set_selection_owner (Window owner, Atom selection, Timestamp time);
 
-		public GetSelectionOwnerCookie get_selection_owner (AtomT selection);
-		public GetSelectionOwnerCookie get_selection_owner_unchecked (AtomT selection);
+		public GetSelectionOwnerCookie get_selection_owner (Atom selection);
+		public GetSelectionOwnerCookie get_selection_owner_unchecked (Atom selection);
 		public GetSelectionOwnerReply? get_selection_owner_reply (GetSelectionOwnerCookie cookie, out GenericError? e = null);
 
-		public VoidCookie convert_selection_checked (Window requestor, AtomT selection, AtomT target, AtomT property, Timestamp time);
-		public VoidCookie convert_selection (Window requestor, AtomT selection, AtomT target, AtomT property, Timestamp time);
+		public VoidCookie convert_selection_checked (Window requestor, Atom selection, Atom target, Atom property, Timestamp time);
+		public VoidCookie convert_selection (Window requestor, Atom selection, Atom target, Atom property, Timestamp time);
 
 		//send_event
 
@@ -649,7 +649,7 @@ namespace Xcb {
 	[Compact]
 	[CCode (cname = "xcb_intern_atom_reply_t", ref_function = "", unref_function = "free")]
 	public class InternAtomReply : GenericReply {
-		public AtomT atom;
+		public Atom atom;
 	}
 
 	[SimpleType]
@@ -677,7 +677,7 @@ namespace Xcb {
 	[CCode (cname = "xcb_get_property_reply_t", ref_function = "", unref_function = "free")]
 	public class GetPropertyReply : GenericReply {
 		public uint8 format;
-		public AtomT type;
+		public Atom type;
 		public uint32 bytes_after;
 		private uint32 value_len;
 		[CCode (cname = "xcb_get_property_value")]
@@ -1369,7 +1369,7 @@ namespace Xcb {
 	[SimpleType]
 	[IntegerType (rank = 9)]
 	[CCode (cname = "xcb_atom_t", has_type_id = false)]
-	public struct AtomT {
+	public struct Atom {
 	}
 
 	[SimpleType]
@@ -1463,8 +1463,8 @@ namespace Xcb {
 		DELETE
 	}
 
-	[CCode (cname = "xcb_atom_enum_t", has_type_id = false)]
-	public enum Atom {
+	[CCode (cname = "xcb_atom_enum_t", cprefix = "XCB_ATOM_", has_type_id = false)]
+	public enum AtomEnum {
 		NONE,
 		ANY,
 		PRIMARY,
@@ -1973,7 +1973,7 @@ namespace Xcb {
 	[CCode (cname = "xcb_property_notify_event_t", ref_function = "", unref_function = "")]
 	public class PropertyNotifyEvent : GenericEvent {
 		public Window window;
-		public AtomT atom;
+		public Atom atom;
 		public Timestamp time;
 		public Property state;
 	}
@@ -1983,9 +1983,9 @@ namespace Xcb {
 	public class SelectionNotifyEvent : GenericEvent {
 		public Timestamp time;
 		public Window requestor;
-		public AtomT selection;
-		public AtomT target;
-		public AtomT property;
+		public Atom selection;
+		public Atom target;
+		public Atom property;
 	}
 
 	[Compact]
@@ -2552,7 +2552,7 @@ namespace Xcb {
 	[SimpleType]
 	[CCode (cname = "xcb_fontprop_t", has_type_id = false)]
 	public struct Fontprop {
-		public AtomT name;
+		public Atom name;
 		public uint32 value;
 	}
 
