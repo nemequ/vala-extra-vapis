@@ -12,13 +12,21 @@ distributed with valac, but generally that is reserved for relatively
 popular libraries with well structured VAPIs and have a fairly strong
 aversion to breaking backwards compatibility.
 
-The purpose of this repository is provide a stable home for bindings
-which would otherwise not have one.  Unlike valac, where submissions
-are screened with care before inclusion, the barrier to entry for this
-repository is quite low.  Pretty much the only thing which would
-preclude inclusion is a licensing issue.  You don't need to commit to
-maintaining the bindings, preserving backwards compatibility, testing,
-etc.
+Bindings included in this repository are meant to be copied into your
+project or used as a git submodule or subtree, and are *not* intended
+to be installed system-wide or packaged by distributions.  This means
+that projects choose when to upgrade bindings instead of having the
+bindings upgraded for them when a new version of Vala is installed,
+which means backwards incompatible changes are allowed in this
+repository.
+
+Unlike valac, where submissions are carefully screened before
+inclusion, the barrier to entry for this repository is quite low.
+Pretty much the only thing which would preclude inclusion is a
+licensing issue.  Contributors need not commit to maintaining the
+bindings, preserving backwards compatibility, testing, etc.  With that
+in mind, this repository provides a good stable, central location for
+bindings.
 
 == Usage ==
 
@@ -31,13 +39,12 @@ your source tree.
 == Submitting Bindings For Inclusion ==
 
 If you have bindings which you would like to see housed in this
-repository, simply submit a request via our issue tracker on github
-(https://github.com/nemequ/vala-extra-vapis/issues) or, even better, a
-pull request.
+repository, simply submit a bug to the "Bindings: Extra" component in
+Vala's bugzilla product:
 
-== Documentation and Tests ==
+  https://bugzilla.gnome.org/browse.cgi?product=vala
 
-In order to keep the vala-extra-vapis repository small all tests,
-examples, documentation, and other supplementary material is hosted in
-a different repository, "vala-extra-vapis-supplemental", located at
-https://github.com/nemequ/vala-extra-vapis-supplemental
+Or, if you prefer to use GitHub, you can submit an issue or a pull
+request to our GitHub mirror:
+
+  https://github.com/nemequ/vala-extra-vapis/issues
