@@ -279,7 +279,7 @@ namespace Xcb {
 			private uint16 nRates;
 			[CCode (cname = "xcb_randr_refresh_rates_rates")]
 			private uint16* vala_rates ();
-			public uint16[] rates
+			public unowned uint16[] rates
 			{
 				get {
 					unowned uint16[] res = (uint16[]) vala_rates ();
@@ -305,7 +305,7 @@ namespace Xcb {
 
 		[Compact]
 		[CCode (cname = "xcb_randr_query_version_reply_t", ref_function = "", unref_function = "free")]
-		public class QueryVersionReply {
+		public class QueryVersionReply : Xcb.GenericReply {
 			public uint32 major_version;
 			public uint32 minor_version;
 		}
@@ -336,7 +336,7 @@ namespace Xcb {
 
 		[Compact]
 		[CCode (cname = "xcb_randr_set_screen_config_reply_t", ref_function = "", unref_function = "free")]
-		public class SetScreenConfigReply {
+		public class SetScreenConfigReply : Xcb.GenericReply {
 			public SetConfig status;
 			public Timestamp new_timestamp;
 			public Timestamp config_timestamp;
@@ -363,7 +363,7 @@ namespace Xcb {
 
 		[Compact]
 		[CCode (cname = "xcb_randr_get_screen_info_reply_t", ref_function = "", unref_function = "free")]
-		public class GetScreenInfoReply {
+		public class GetScreenInfoReply : Xcb.GenericReply {
 			public Rotation rotations;
 			public Window root;
 			public Timestamp timestamp;
@@ -410,7 +410,7 @@ namespace Xcb {
 
 		[Compact]
 		[CCode (cname = "xcb_randr_get_screen_size_range_reply_t", ref_function = "", unref_function = "free")]
-		public class GetScreenSizeRangeReply {
+		public class GetScreenSizeRangeReply : Xcb.GenericReply {
 			public uint16 min_width;
 			public uint16 min_height;
 			public uint16 max_width;
@@ -461,7 +461,7 @@ namespace Xcb {
 
 		[Compact]
 		[CCode (cname = "xcb_randr_get_screen_resources_reply_t", ref_function = "", unref_function = "free")]
-		public class GetScreenResourcesReply {
+		public class GetScreenResourcesReply : Xcb.GenericReply {
 			public Timestamp timestamp;
 			public Timestamp config_timestamp;
 			private uint16 num_crtcs;
@@ -533,7 +533,7 @@ namespace Xcb {
 
 		[Compact]
 		[CCode (cname = "xcb_randr_get_output_info_reply_t", ref_function = "", unref_function = "free")]
-		public class GetOutputInfoReply {
+		public class GetOutputInfoReply : Xcb.GenericReply {
 			public SetConfig status;
 			public Timestamp timestamp;
 			public Crtc crtc;
@@ -589,7 +589,7 @@ namespace Xcb {
 
 		[Compact]
 		[CCode (cname = "xcb_randr_list_output_properties_reply_t", ref_function = "", unref_function = "free")]
-		public class ListOutputPropertiesReply {
+		public class ListOutputPropertiesReply : Xcb.GenericReply {
 			private uint16 num_atoms;
 			[CCode (cname = "xcb_randr_list_output_properties_atoms")]
 			private Atom* vala_atoms();
@@ -612,7 +612,7 @@ namespace Xcb {
 
 		[Compact]
 		[CCode (cname = "xcb_randr_query_output_property_reply_t", ref_function = "", unref_function = "free")]
-		public class QueryOutputPropertyReply {
+		public class QueryOutputPropertyReply : Xcb.GenericReply {
 			public bool pending;
 			public bool range;
 			public bool immutable;
@@ -638,7 +638,7 @@ namespace Xcb {
 
 		[Compact]
 		[CCode (cname = "xcb_randr_get_output_property_reply_t", ref_function = "", unref_function = "free")]
-		public class GetOutputPropertyReply {
+		public class GetOutputPropertyReply : Xcb.GenericReply {
 			public uint8 format;
 			public Atom type;
 			public uint32 bytes_after;
@@ -677,7 +677,7 @@ namespace Xcb {
 
 		[Compact]
 		[CCode (cname = "xcb_randr_create_mode_reply_t", ref_function = "", unref_function = "free")]
-		public class CreateModeReply {
+		public class CreateModeReply : Xcb.GenericReply {
 			public Mode mode;
 		}
 
@@ -689,7 +689,7 @@ namespace Xcb {
 
 		[Compact]
 		[CCode (cname = "xcb_randr_get_crtc_info_reply_t", ref_function = "", unref_function = "free")]
-		public class GetCrtcInfoReply {
+		public class GetCrtcInfoReply : Xcb.GenericReply {
 			public SetConfig status;
 			public Timestamp timestamp;
 			public int16 x;
@@ -731,7 +731,7 @@ namespace Xcb {
 
 		[Compact]
 		[CCode (cname = "xcb_randr_set_crtc_config_reply_t", ref_function = "", unref_function = "free")]
-		public class SetCrtcConfigReply {
+		public class SetCrtcConfigReply : Xcb.GenericReply {
 			public SetConfig status;
 			public Timestamp timestamp;
 		}
@@ -744,7 +744,7 @@ namespace Xcb {
 
 		[Compact]
 		[CCode (cname = "xcb_randr_get_crtc_gamma_size_reply_t", ref_function = "", unref_function = "free")]
-		public class GetCrtcGammaSizeReply {
+		public class GetCrtcGammaSizeReply : Xcb.GenericReply {
 			public uint16 size;
 		}
 
@@ -756,7 +756,7 @@ namespace Xcb {
 
 		[Compact]
 		[CCode (cname = "xcb_randr_get_crtc_gamma_reply_t", ref_function = "", unref_function = "free")]
-		public class GetCrtcGammaReply {
+		public class GetCrtcGammaReply : Xcb.GenericReply {
 			private uint16 size;
 			[CCode (cname = "xcb_randr_get_crtc_gamma_red")]
 			private uint16* vala_red ();
@@ -798,7 +798,7 @@ namespace Xcb {
 
 		[Compact]
 		[CCode (cname = "xcb_randr_get_screen_resources_current_reply_t", ref_function = "", unref_function = "free")]
-		public class GetScreenResourcesCurrentReply {
+		public class GetScreenResourcesCurrentReply : Xcb.GenericReply {
 			public Timestamp timestamp;
 			public Timestamp config_timestamp;
 			private uint16 num_crtcs;
@@ -871,7 +871,7 @@ namespace Xcb {
 
 		[Compact]
 		[CCode (cname = "xcb_randr_get_crtc_transform_reply_t", ref_function = "", unref_function = "free")]
-		public class GetCrtcTransformReply {
+		public class GetCrtcTransformReply : Xcb.GenericReply {
 			public Xcb.Render.Transform pending_transform;
 			public uint8 has_transforms;
 			public Xcb.Render.Transform current_transform;
@@ -915,7 +915,7 @@ namespace Xcb {
 
 		[Compact]
 		[CCode (cname = "xcb_randr_get_panning_reply_t", ref_function = "", unref_function = "free")]
-		public class GetPanningReply {
+		public class GetPanningReply : Xcb.GenericReply {
 			public SetConfig status;
 			public Timestamp timestamp;
 			public uint16 left;
@@ -940,7 +940,7 @@ namespace Xcb {
 
 		[Compact]
 		[CCode (cname = "xcb_randr_set_panning_reply_t", ref_function = "", unref_function = "free")]
-		public class SetPanningReply {
+		public class SetPanningReply : Xcb.GenericReply {
 			public SetConfig status;
 			public Timestamp timestamp;
 		}
@@ -953,7 +953,7 @@ namespace Xcb {
 
 		[Compact]
 		[CCode (cname = "xcb_randr_get_output_primary_reply_t", ref_function = "", unref_function = "free")]
-		public class GetOutputPrimaryReply {
+		public class GetOutputPrimaryReply : Xcb.GenericReply {
 			public Output output;
 		}
 
@@ -965,7 +965,7 @@ namespace Xcb {
 
 		[Compact]
 		[CCode (cname = "xcb_randr_get_providers_reply_t", ref_function = "", unref_function = "free")]
-		public class GetProvidersReply {
+		public class GetProvidersReply : Xcb.GenericReply {
 			public Timestamp timestamp;
 			private uint16 num_providers;
 			[CCode (cname = "xcb_randr_get_providers_providers")]
@@ -996,7 +996,7 @@ namespace Xcb {
 
 		[Compact]
 		[CCode (cname = "xcb_randr_get_provider_info_reply_t", ref_function = "", unref_function = "free")]
-		public class GetProviderInfoReply {
+		public class GetProviderInfoReply : Xcb.GenericReply {
 			public SetConfig status;
 			public Timestamp timestamp;
 			public ProviderCapability capabilities;
@@ -1057,7 +1057,7 @@ namespace Xcb {
 
 		[Compact]
 		[CCode (cname = "xcb_randr_list_provider_properties_reply_t", ref_function = "", unref_function = "free")]
-		public class ListProviderPropertiesReply {
+		public class ListProviderPropertiesReply : Xcb.GenericReply {
 			private uint16 num_atoms;
 			[CCode (cname = "xcb_randr_list_provider_properties_atoms")]
 			private Atom* vala_atoms();
@@ -1080,7 +1080,7 @@ namespace Xcb {
 
 		[Compact]
 		[CCode (cname = "xcb_randr_query_provider_property_reply_t", ref_function = "", unref_function = "free")]
-		public class QueryProviderPropertyReply {
+		public class QueryProviderPropertyReply : Xcb.GenericReply {
 			public bool pending;
 			public bool range;
 			public bool immutable;
@@ -1106,7 +1106,7 @@ namespace Xcb {
 
 		[Compact]
 		[CCode (cname = "xcb_randr_get_provider_property_reply_t", ref_function = "", unref_function = "free")]
-		public class GetProviderPropertyReply {
+		public class GetProviderPropertyReply : Xcb.GenericReply {
 			public uint8 format;
 			public Atom type;
 			public uint32 bytes_after;
