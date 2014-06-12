@@ -20,13 +20,12 @@ namespace Xcb {
 
 	[CCode (lower_case_cprefix = "xcb_render_", cheader_filename = "xcb/render.h")]
 	namespace Render {
-
 		public static Connection get_connection (Xcb.Connection c) {
 			return (Connection) c;
 		}
 
 		[Compact]
-		[CCode (cname = "xcb_connection_t", cprefix = "xcb_render_")]
+		[CCode (cname = "xcb_connection_t", cprefix = "xcb_render_", unref_function = "")]
 		public class Connection : Xcb.Connection {
 			public QueryVersionCookie query_version (uint32 client_major_version, uint32 client_minor_version);
 			public QueryVersionCookie query_version_unchecked (uint32 client_major_version, uint32 client_minor_version);
@@ -478,7 +477,7 @@ namespace Xcb {
 
 		[Compact]
 		[CCode (cname = "xcb_render_query_version_reply_t", ref_function = "", unref_function = "free")]
-		public class QueryVersionReply {
+		public class QueryVersionReply : Xcb.GenericReply {
 			public uint32 major_version;
 			public uint32 minor_version;
 		}
@@ -491,7 +490,7 @@ namespace Xcb {
 
 		[Compact]
 		[CCode (cname = "xcb_render_query_pict_formats_reply_t", ref_function = "", unref_function = "free")]
-		public class QueryPictFormatsReply {
+		public class QueryPictFormatsReply : Xcb.GenericReply {
 			public uint32 num_depths; /* Total number of depths */
 			public uint32 num_visuals; /* Total number of visuals */
 			private uint32 num_formats;
@@ -545,7 +544,7 @@ namespace Xcb {
 
 		[Compact]
 		[CCode (cname = "xcb_render_query_pict_index_values_reply_t", ref_function = "", unref_function = "free")]
-		public class QueryPictIndexValuesReply {
+		public class QueryPictIndexValuesReply : Xcb.GenericReply {
 			private uint32 num_values;
 			[CCode (cname = "xcb_render_query_pict_index_values_values")]
 			private IndexValue* vala_values ();
@@ -568,7 +567,7 @@ namespace Xcb {
 
 		[Compact]
 		[CCode (cname = "xcb_render_query_filters_reply_t", ref_function = "", unref_function = "free")]
-		public class QueryFiltersReply {
+		public class QueryFiltersReply : Xcb.GenericReply {
 			private uint32 num_aliases;
 			[CCode (cname = "xcb_render_query_filters_aliases")]
 			private uint16* vala_aliases ();
