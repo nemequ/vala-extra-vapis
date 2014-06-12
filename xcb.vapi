@@ -67,12 +67,12 @@ namespace Xcb {
 		public VoidCookie circulate_window_checked (Circulate direction, Window window);
 		public VoidCookie circulate_window (Circulate direction, Window window);
 
-		public GetWindowAttributesCookie get_window_attributes (Window wid);
-		public GetWindowAttributesCookie get_window_attributes_unchecked (Window wid);
+		public GetWindowAttributesCookie get_window_attributes (Window window);
+		public GetWindowAttributesCookie get_window_attributes_unchecked (Window window);
 		public GetWindowAttributesReply? get_window_attributes_reply (GetWindowAttributesCookie cookie, out GenericError? e = null);
 
-		public VoidCookie change_window_attributes (Window wid, uint32 value_mask, [CCode (array_length = false)] uint32[]? value_list);
-		public VoidCookie change_window_attributes_checked (Window wid, uint32 value_mask, [CCode (array_length = false)] uint32[]? value_list);
+		public VoidCookie change_window_attributes_checked (Window window, CW value_mask, [CCode (array_length = false)] uint32[]? value_list);
+		public VoidCookie change_window_attributes (Window window, CW value_mask, [CCode (array_length = false)] uint32[]? value_list);
 
 		public QueryTreeCookie query_tree (Window wid);
 		public QueryTreeCookie query_tree_unchecked (Window wid);
@@ -145,9 +145,9 @@ namespace Xcb {
 		public ListPropertiesCookie list_properties_unchecked (Window window);
 		public ListPropertiesReply? list_properties_reply (ListPropertiesCookie cookie, out GenericError? e = null);
 
-		public VoidCookie configure_window (Window window, uint16 value_mask, uint32 *value_list);
-		public VoidCookie configure_window_checked (Window window, uint16 value_mask, uint32 *value_list);
-		
+		public VoidCookie configure_window_checked (Window window, ConfigWindow value_mask, [CCode (array_length = false)] uint32[] value_list);
+		public VoidCookie configure_window (Window window, ConfigWindow value_mask, [CCode (array_length = false)] uint32[] value_list);
+
 		public VoidCookie reparent_window (Window window, Window parent, uint16 x, uint16 y);
 		public VoidCookie reparent_window_checked (Window window, Window parent, uint16 x, uint16 y);
 
@@ -167,21 +167,21 @@ namespace Xcb {
 
 		//send_event
 
-		public GrabPointerCookie grab_pointer (bool owner_events, Window grab_window, uint16 event_mask, GrabMode pointer_mode, GrabMode keyboard_mode, Window confine_to, Cursor cursor, Timestamp time);
-		public GrabPointerCookie grab_pointer_unchecked (bool owner_events, Window grab_window, uint16 event_mask, GrabMode pointer_mode, GrabMode keyboard_mode, Window confine_to, Cursor cursor, Timestamp time);
+		public GrabPointerCookie grab_pointer (bool owner_events, Window grab_window, EventMask event_mask, GrabMode pointer_mode, GrabMode keyboard_mode, Window confine_to, Cursor cursor, Timestamp time);
+		public GrabPointerCookie grab_pointer_unchecked (bool owner_events, Window grab_window, EventMask event_mask, GrabMode pointer_mode, GrabMode keyboard_mode, Window confine_to, Cursor cursor, Timestamp time);
 		public GrabPointerReply? grab_pointer_reply (GrabPointerCookie cookie, out GenericError? e = null);
 
 		public VoidCookie ungrab_pointer_checked (Timestamp time);
 		public VoidCookie ungrab_pointer (Timestamp time);
 
-		public VoidCookie grab_button_checked (bool owner_events, Window grab_window, uint16 event_mask, GrabMode pointer_mode, GrabMode keyboard_mode, Window confine_to, Cursor cursor, uint8 button, uint16 modifiers);
-		public VoidCookie grab_button (bool owner_events, Window grab_window, uint16 event_mask, GrabMode pointer_mode, GrabMode keyboard_mode, Window confine_to, Cursor cursor, uint8 button, uint16 modifiers);
+		public VoidCookie grab_button_checked (bool owner_events, Window grab_window, EventMask event_mask, GrabMode pointer_mode, GrabMode keyboard_mode, Window confine_to, Cursor cursor, uint8 button, uint16 modifiers);
+		public VoidCookie grab_button (bool owner_events, Window grab_window, EventMask event_mask, GrabMode pointer_mode, GrabMode keyboard_mode, Window confine_to, Cursor cursor, uint8 button, uint16 modifiers);
 
 		public VoidCookie ungrab_button_checked (uint8 button, Window grab_window, uint16 modifiers);
 		public VoidCookie ungrab_button (uint8 button, Window grab_window, uint16 modifiers);
 
-		public VoidCookie change_active_pointer_grab_checked (Cursor cursor, Timestamp time, uint16 event_mask);
-		public VoidCookie change_active_pointer_grab (Cursor cursor, Timestamp time, uint16 event_mask);
+		public VoidCookie change_active_pointer_grab_checked (Cursor cursor, Timestamp time, EventMask event_mask);
+		public VoidCookie change_active_pointer_grab (Cursor cursor, Timestamp time, EventMask event_mask);
 
 		public GrabKeyboardCookie grab_keyboard (bool owner_events, Window grab_window, Timestamp time, GrabMode pointer_mode, GrabMode keyboard_mode);
 		public GrabKeyboardCookie grab_keyboard_unchecked (bool owner_events, Window grab_window, Timestamp time, GrabMode pointer_mode, GrabMode keyboard_mode);
@@ -196,7 +196,8 @@ namespace Xcb {
 		public VoidCookie ungrab_key_checked (Keycode key, Window grab_window, uint16 modifiers);
 		public VoidCookie ungrab_key (Keycode key, Window grab_window, uint16 modifiers);
 
-		//allow_events
+		public VoidCookie allow_events_checked (Allow mode, Timestamp time);
+		public VoidCookie allow_events (Allow mode, Timestamp time);
 
 		public VoidCookie grab_server_checked ();
 		public VoidCookie grab_server ();
@@ -226,7 +227,9 @@ namespace Xcb {
 		public GetInputFocusCookie get_input_focus_unchecked ();
 		public GetInputFocusReply? get_input_focus_reply (GetInputFocusCookie cookie, out GenericError? e = null);
 
-		//query_keymap
+		public QueryKeymapCookie query_keymap ();
+		public QueryKeymapCookie query_keymap_unchecked ();
+		public QueryKeymapReply? query_keymap_reply (QueryKeymapCookie cookie, out GenericError? e = null);
 
 		[CCode (cname = "xcb_open_font_checked")]
 		private VoidCookie vala_open_font_checked (Font fid, uint16 name_len, string name);
@@ -302,14 +305,14 @@ namespace Xcb {
 		public VoidCookie free_pixmap_checked (Pixmap pid);
 		public VoidCookie free_pixmap (Pixmap pid);
 
-		public VoidCookie create_gc_checked (GContext cid, Drawable drawable, uint32 value_mask = 0, [CCode (array_length = false)] uint32[]? value_list = null);
-		public VoidCookie create_gc (GContext cid, Drawable drawable, uint32 value_mask = 0, [CCode (array_length = false)] uint32[]? value_list = null);
+		public VoidCookie create_gc_checked (GContext cid, Drawable drawable, GC value_mask = 0, [CCode (array_length = false)] uint32[]? value_list = null);
+		public VoidCookie create_gc (GContext cid, Drawable drawable, GC value_mask = 0, [CCode (array_length = false)] uint32[]? value_list = null);
 
-		public VoidCookie change_gc_checked (GContext gc, uint32 value_mask, [CCode (array_length = false)] uint32[]? value_list);
-		public VoidCookie change_gc (GContext gc, uint32 value_mask, [CCode (array_length = false)] uint32[]? value_list);
+		public VoidCookie change_gc_checked (GContext gc, GC value_mask, [CCode (array_length = false)] uint32[]? value_list);
+		public VoidCookie change_gc (GContext gc, GC value_mask, [CCode (array_length = false)] uint32[]? value_list);
 
-		public VoidCookie copy_gc_checked (GContext src_gc, GContext dst_gc, uint32 value_mask);
-		public VoidCookie copy_gc (GContext src_gc, GContext dst_gc, uint32 value_mask);
+		public VoidCookie copy_gc_checked (GContext src_gc, GContext dst_gc, GC value_mask);
+		public VoidCookie copy_gc (GContext src_gc, GContext dst_gc, GC value_mask);
 
 		public VoidCookie set_dashes_checked (GContext gc, uint16 dash_offset, [CCode (array_length_pos = 2.9, array_length_type = "uint16_t")] uint8[] dashes);
 		public VoidCookie set_dashes (GContext gc, uint16 dash_offset, [CCode (array_length_pos = 2.9, array_length_type = "uint16_t")] uint8[] dashes);
@@ -320,8 +323,8 @@ namespace Xcb {
 		public VoidCookie free_gc_checked (GContext gc);
 		public VoidCookie free_gc (GContext gc);
 
-		public VoidCookie clear_area_checked (uint8 exposures, Window window, int16 x, int16 y, uint16 width, uint16 height);
-		public VoidCookie clear_area (uint8 exposures, Window window, int16 x, int16 y, uint16 width, uint16 height);
+		public VoidCookie clear_area_checked (bool exposures, Window window, int16 x, int16 y, uint16 width, uint16 height);
+		public VoidCookie clear_area (bool exposures, Window window, int16 x, int16 y, uint16 width, uint16 height);
 
 		public VoidCookie copy_area_checked (Drawable src_drawable, Drawable dst_drawable, GContext gc, int16 src_x, int16 src_y, int16 dst_x, int16 dst_y, uint16 width, uint16 height);
 		public VoidCookie copy_area (Drawable src_drawable, Drawable dst_drawable, GContext gc, int16 src_x, int16 src_y, int16 dst_x, int16 dst_y, uint16 width, uint16 height);
@@ -475,8 +478,8 @@ namespace Xcb {
 		public VoidCookie recolor_cursor_checked (Cursor cursor, uint16 fore_red, uint16 fore_green, uint16 fore_blue, uint16 back_red, uint16 back_green, uint16 back_blue);
 		public VoidCookie recolor_cursor (Cursor cursor, uint16 fore_red, uint16 fore_green, uint16 fore_blue, uint16 back_red, uint16 back_green, uint16 back_blue);
 
-		public QueryBestSizeCookie query_best_size (uint8 _class, Drawable drawable, uint16 width, uint16 height); // FIXME: Is there an enum for class?
-		public QueryBestSizeCookie query_best_size_unchecked (uint8 _class, Drawable drawable, uint16 width, uint16 height);
+		public QueryBestSizeCookie query_best_size (QueryShapeOf _class, Drawable drawable, uint16 width, uint16 height);
+		public QueryBestSizeCookie query_best_size_unchecked (QueryShapeOf _class, Drawable drawable, uint16 width, uint16 height);
 		public QueryBestSizeReply? query_best_size_reply (QueryBestSizeCookie cookie, out GenericError? e = null);
 
 		[CCode (cname = "xcb_query_extension")]
@@ -508,12 +511,15 @@ namespace Xcb {
 		public VoidCookie bell_checked (int8 percent);
 		public VoidCookie bell (int8 percent);
 
-		//change_pointer_control
+		public VoidCookie change_pointer_control_checked (int16 acceleration_numerator, int16 acceleration_denominator, int16 threshold, bool do_acceleration, bool do_threshold);
+		public VoidCookie change_pointer_control (int16 acceleration_numerator, int16 acceleration_denominator, int16 threshold, bool do_acceleration, bool do_threshold);
 
-		//get_pointer_control
+		public GetPointerControlCookie get_pointer_control ();
+		public GetPointerControlCookie get_pointer_control_unchecked ();
+		public GetPointerControlReply? get_pointer_control_reply (GetPointerControlCookie cookie, out GenericError? e = null);
 
-		public VoidCookie set_screen_saver_checked (int16 timeout, int16 interval, uint8 prefer_blanking, uint8 allow_exposures);
-		public VoidCookie set_screen_saver (int16 timeout, int16 interval, uint8 prefer_blanking, uint8 allow_exposures);
+		public VoidCookie set_screen_saver_checked (int16 timeout, int16 interval, bool prefer_blanking, bool allow_exposures);
+		public VoidCookie set_screen_saver (int16 timeout, int16 interval, bool prefer_blanking, bool allow_exposures);
 
 		public GetScreenSaverCookie get_screen_saver ();
 		public GetScreenSaverCookie get_screen_saver_unchecked ();
@@ -535,8 +541,8 @@ namespace Xcb {
 		public VoidCookie kill_client_checked (uint32 resource);
 		public VoidCookie kill_client (uint32 resource);
 
-		public VoidCookie rotate_properties_checked (Window window, int16 delta, [CCode (array_length_pos = 1.9, array_length_type = "uint16_t")] AtomT[] atoms);
-		public VoidCookie rotate_properties (Window window, int16 delta, [CCode (array_length_pos = 1.9, array_length_type = "uint16_t")] AtomT[] atoms);
+		public VoidCookie rotate_properties_checked (Window window, int16 delta, [CCode (array_length_pos = 1.9, array_length_type = "uint16_t")] Atom[] atoms);
+		public VoidCookie rotate_properties (Window window, int16 delta, [CCode (array_length_pos = 1.9, array_length_type = "uint16_t")] Atom[] atoms);
 
 		public VoidCookie force_screen_saver_checked (ScreenSaver mode);
 		public VoidCookie force_screen_saver (ScreenSaver mode);
@@ -554,8 +560,7 @@ namespace Xcb {
 	}
 
 	[CCode (cprefix = "XCB_CONN_", cname = "int", has_type_id = false)]
-	public enum ConnectionError
-	{
+	public enum ConnectionError {
 		ERROR,
 		CLOSED_EXT_NOTSUPPORTED,
 		CLOSED_MEM_INSUFFICIENT,
@@ -572,17 +577,14 @@ namespace Xcb {
 	}
 
 	[CCode (cname = "xcb_get_geometry_reply_t", ref_function = "", unref_function = "free")]
-	public class GetGeometryReply {
-		public uint8      response_type;
-		public uint8      depth;
-		public uint16     sequence;
-		public uint32     length;
-		public Window     root;
-		public int16      x;
-		public int16      y;
-		public uint16     width;
-		public uint16     height;
-		public uint16     border_width;
+	public class GetGeometryReply : GenericReply {
+		public uint8 depth;
+		public Window root;
+		public int16 x;
+		public int16 y;
+		public uint16 width;
+		public uint16 height;
+		public uint16 border_width;
 	}
 
 	[SimpleType]
@@ -593,25 +595,22 @@ namespace Xcb {
 
 	[Compact]
 	[CCode (cname = "xcb_get_window_attributes_reply_t", ref_function = "", unref_function = "")]
-	public class GetWindowAttributesReply {
-		public uint8        response_type;
-		public uint8        backing_store;
-		public uint16       sequence;
-		public uint32       length;
-		public VisualID     visual;
-		public uint16       _class;
-		public uint8        bit_gravity;
-		public uint8        win_gravity;
-		public uint32       backing_planes;
-		public uint32       backing_pixel;
-		public uint8        save_under;
-		public uint8        map_is_installed;
-		public uint8        map_state;
-		public uint8        override_redirect;
-		public Colormap     colormap;
-		public uint32       all_event_masks;
-		public uint32       your_event_mask;
-		public uint16       do_not_propagate_mask;
+	public class GetWindowAttributesReply : GenericReply {
+		public uint8 backing_store;
+		public VisualID visual;
+		public uint16 _class;
+		public uint8 bit_gravity;
+		public uint8 win_gravity;
+		public uint32 backing_planes;
+		public uint32 backing_pixel;
+		public uint8 save_under;
+		public uint8 map_is_installed;
+		public uint8 map_state;
+		public uint8 override_redirect;
+		public Colormap colormap;
+		public uint32 all_event_masks;
+		public uint32 your_event_mask;
+		public uint16 do_not_propagate_mask;
 	}
 
 	[SimpleType]
@@ -639,11 +638,8 @@ namespace Xcb {
 
 	[Compact]
 	[CCode (cname = "xcb_intern_atom_reply_t", ref_function = "", unref_function = "free")]
-	public class InternAtomReply {
-		private uint8    response_type;
-		private uint16   sequence;
-		public  uint32   length;
-		public  AtomT    atom;
+	public class InternAtomReply : GenericReply {
+		public AtomT atom;
 	}
 
 	[SimpleType]
@@ -654,11 +650,8 @@ namespace Xcb {
 
 	[Compact]
 	[CCode (cname = "xcb_get_atom_name_reply_t", ref_function = "", unref_function = "free")]
-	public class GetAtomNameReply {
-		private uint8 response_type;
-		private uint16 sequence;
-		public uint32 length;
-		public uint16 name_len;
+	public class GetAtomNameReply : GenericReply {
+		private uint16 name_len;
 		[CCode (cname = "xcb_get_atom_name_name")]
 		private unowned string vala_name ();
 		public string name { owned get { return "%.*s".printf (name_len, vala_name ()); } }
@@ -672,7 +665,7 @@ namespace Xcb {
 
 	[Compact]
 	[CCode (cname = "xcb_list_properties_reply_t", ref_function = "", unref_function = "free")]
-	public class ListPropertiesReply {
+	public class ListPropertiesReply : GenericReply {
 		private uint16 atoms_len;
 		[CCode (cname = "xcb_list_properties_atoms")]
 		private Atom* vala_atoms ();
@@ -695,7 +688,7 @@ namespace Xcb {
 
 	[Compact]
 	[CCode (cname = "xcb_get_selection_owner_reply_t", ref_function = "", unref_function = "free")]
-	public class GetSelectionOwnerReply {
+	public class GetSelectionOwnerReply : GenericReply {
 		public Window owner;
 	}
 
@@ -707,7 +700,7 @@ namespace Xcb {
 
 	[Compact]
 	[CCode (cname = "xcb_grab_pointer_reply_t", ref_function = "", unref_function = "free")]
-	public class GrabPointerReply {
+	public class GrabPointerReply : GenericReply {
 		public GrabStatus status;
 	}
 
@@ -719,7 +712,7 @@ namespace Xcb {
 
 	[Compact]
 	[CCode (cname = "xcb_grab_keyboard_reply_t", ref_function = "", unref_function = "free")]
-	public class GrabKeyboardReply {
+	public class GrabKeyboardReply : GenericReply {
 		public GrabStatus status;
 	}
 
@@ -731,15 +724,15 @@ namespace Xcb {
 
 	[Compact]
 	[CCode (cname = "xcb_query_pointer_reply_t", ref_function = "", unref_function = "free")]
-	public class QueryPointerReply {
-		public uint8 same_screen;
+	public class QueryPointerReply : GenericReply {
+		public bool same_screen;
 		public Window root;
 		public Window child;
 		public int16 root_x;
 		public int16 root_y;
 		public int16 win_x;
 		public int16 win_y;
-		public uint16 mask;
+		public KeyButMask mask;
 	}
 
 	[SimpleType]
@@ -750,14 +743,12 @@ namespace Xcb {
 
 	[Compact]
 	[CCode (cname = "xcb_get_motion_events_reply_t", ref_function = "", unref_function = "free")]
-	public class GetMotionEventsReply {
+	public class GetMotionEventsReply : GenericReply {
 		private uint32 events_len;
 		[CCode (cname = "xcb_get_motion_events_events")]
 		private Timecoord* vala_events ();
-		public Timecoord[] events
-		{
-			get
-			{
+		public unowned Timecoord[] events {
+			get {
 				unowned Timecoord[] res = (Timecoord[]) vala_events ();
 				res.length = (int) events_len;
 				return res;
@@ -773,16 +764,14 @@ namespace Xcb {
 
 	[Compact]
 	[CCode (cname = "xcb_get_image_reply_t", ref_function = "", unref_function = "")]
-	public class GetImageReply {
+	public class GetImageReply : GenericReply {
 		public uint8 depth;
 		public VisualID visual;
 		private uint32 length;
 		[CCode (cname = "xcb_get_image_data")]
 		public uint8* vala_data ();
-		public uint8[] data
-		{
-			get
-			{
+		public unowned uint8[] data {
+			get {
 				unowned uint8[] res = (uint8[]) vala_data ();
 				res.length = (int) length;
 				return res;
@@ -798,14 +787,12 @@ namespace Xcb {
 
 	[Compact]
 	[CCode (cname = "xcb_list_installed_colormaps_reply_t", ref_function = "", unref_function = "free")]
-	public class ListInstalledColormapsReply {
+	public class ListInstalledColormapsReply : GenericReply {
 		private uint16 cmaps_len;
 		[CCode (cname = "xcb_list_installed_colormaps_cmaps")]
 		private Colormap* vala_cmaps ();
-		public Colormap[] cmaps
-		{
-			get
-			{
+		public unowned Colormap[] cmaps {
+			get {
 				unowned Colormap[] res = (Colormap[]) vala_cmaps ();
 				res.length = (int) cmaps_len;
 				return res;
@@ -821,7 +808,7 @@ namespace Xcb {
 
 	[Compact]
 	[CCode (cname = "xcb_alloc_color_reply_t", ref_function = "", unref_function = "free")]
-	public class AllocColorReply {
+	public class AllocColorReply : GenericReply {
 		public uint16 red;
 		public uint16 green;
 		public uint16 blue;
@@ -836,7 +823,7 @@ namespace Xcb {
 
 	[Compact]
 	[CCode (cname = "xcb_alloc_named_color_reply_t", ref_function = "", unref_function = "free")]
-	public class AllocNamedColorReply {
+	public class AllocNamedColorReply : GenericReply {
 		public uint32 pixel;
 		public uint16 exact_red;
 		public uint16 exact_green;
@@ -854,12 +841,11 @@ namespace Xcb {
 
 	[Compact]
 	[CCode (cname = "xcb_alloc_color_cells_reply_t", ref_function = "", unref_function = "free")]
-	public class AllocColorCellsReply {
+	public class AllocColorCellsReply : GenericReply {
 		private uint16 pixels_len;
 		[CCode (cname = "xcb_alloc_color_cells_pixels")]
 		private uint32* vala_pixels ();
-		public uint32[] pixels
-		{
+		public unowned uint32[] pixels {
 			get {
 				unowned uint32[] res = (uint32[]) vala_pixels ();
 				res.length = (int) pixels_len;
@@ -869,8 +855,7 @@ namespace Xcb {
 		private uint16 masks_len;
 		[CCode (cname = "xcb_alloc_color_cells_masks")]
 		private uint32* vala_masks ();
-		public uint32[] masks
-		{
+		public unowned uint32[] masks {
 			get {
 				unowned uint32[] res = (uint32[]) vala_masks ();
 				res.length = (int) masks_len;
@@ -887,15 +872,14 @@ namespace Xcb {
 
 	[Compact]
 	[CCode (cname = "xcb_alloc_color_planes_reply_t", ref_function = "", unref_function = "free")]
-	public class AllocColorPlanesReply {
+	public class AllocColorPlanesReply : GenericReply {
 		public uint32 red_mask;
 		public uint32 green_mask;
 		public uint32 blue_mask;
 		private uint16 pixels_len;
 		[CCode (cname = "xcb_alloc_color_planes_pixels")]
 		private uint32* vala_pixels ();
-		public uint32[] pixels
-		{
+		public unowned uint32[] pixels {
 			get {
 				unowned uint32[] res = (uint32[]) vala_pixels ();
 				res.length = (int) pixels_len;
@@ -912,12 +896,11 @@ namespace Xcb {
 
 	[Compact]
 	[CCode (cname = "xcb_query_colors_reply_t", ref_function = "", unref_function = "free")]
-	public class QueryColorsReply {
+	public class QueryColorsReply : GenericReply {
 		private uint16 colors_len;
 		[CCode (cname = "xcb_query_colors_colors")]
 		private RGB* vala_colors ();
-		public RGB[] colors
-		{
+		public unowned RGB[] colors {
 			get {
 				unowned RGB[] res = (RGB[]) vala_colors ();
 				res.length = (int) colors_len;
@@ -934,7 +917,7 @@ namespace Xcb {
 
 	[Compact]
 	[CCode (cname = "xcb_lookup_color_reply_t", ref_function = "", unref_function = "free")]
-	public class LookupColorReply {
+	public class LookupColorReply : GenericReply {
 		public uint16 exact_red;
 		public uint16 exact_green;
 		public uint16 exact_blue;
@@ -951,7 +934,7 @@ namespace Xcb {
 
 	[Compact]
 	[CCode (cname = "xcb_query_best_size_reply_t", ref_function = "", unref_function = "free")]
-	public class QueryBestSizeReply {
+	public class QueryBestSizeReply : GenericReply {
 		public uint16 width;
 		public uint16 height;
 	}
@@ -964,7 +947,7 @@ namespace Xcb {
 
 	[Compact]
 	[CCode (cname = "xcb_query_extension_reply_t", ref_function = "", unref_function = "free")]
-	public class QueryExtensionReply {
+	public class QueryExtensionReply : GenericReply {
 		public bool present;
 		public uint8 major_opcode;
 		public uint8 first_event;
@@ -979,18 +962,15 @@ namespace Xcb {
 
 	[Compact]
 	[CCode (cname = "xcb_list_extensions_reply_t", ref_function = "", unref_function = "free")]
-	public class ListExtensionsReply {
+	public class ListExtensionsReply : GenericReply {
 		private uint8 names_len;
 		[CCode (cname = "xcb_list_extensions_names_iterator")]
 		private StrIterator names_iterator ();
-		public string[] names
-		{
-			owned get
-			{
+		public string[] names {
+			owned get {
 				var value = new string[names_len];
 				var iter = names_iterator ();
-				for (var i = 0; i < value.length; i++)
-				{
+				for (var i = 0; i < value.length; i++) {
 					value[i] = iter.data.name;
 					StrIterator.next (ref iter);
 				}
@@ -1007,7 +987,7 @@ namespace Xcb {
 
 	//[Compact]
 	//[CCode (cname = "xcb_get_keyboard_mapping_reply_t", ref_function = "", unref_function = "free")]
-	//public class GetKeyboardMappingReply {
+	//public class GetKeyboardMappingReply : GenericReply {
 	//}
 
 	[SimpleType]
@@ -1016,10 +996,25 @@ namespace Xcb {
 	public struct GetKeyboardControlCookie {
 	}
 
-	//[Compact]
-	//[CCode (cname = "xcb_get_keyboard_control_reply_t", ref_function = "", unref_function = "free")]
-	//public class GetKeyboardControlReply {
-	//}
+	[Compact]
+	[CCode (cname = "xcb_get_keyboard_control_reply_t", ref_function = "", unref_function = "free")]
+	public class GetKeyboardControlReply : GenericReply {
+		public uint8 key_click_percent;
+		public uint8 bell_percent;
+		public uint16 bell_pitch;
+		public uint16 bell_duration;
+		public uint32 led_mask;
+		public AutoRepeatMode global_auto_repeat;
+		[CCode (cname = "auto_repeats")]
+		private uint32* vala_auto_repeats;
+		public unowned uint32[] auto_repeats {
+			get {
+				unowned uint32[] res = (uint32[]) vala_auto_repeats;
+				res.length = 32;
+				return res;
+			}
+		}
+	}
 
 	[SimpleType]
 	[IntegerType (rank = 9)]
@@ -1027,10 +1022,13 @@ namespace Xcb {
 	public struct GetPointerControlCookie {
 	}
 
-	//[Compact]
-	//[CCode (cname = "xcb_get_pointer_control_reply_t", ref_function = "", unref_function = "free")]
-	//public class GetPointerControlReply {
-	//}
+	[Compact]
+	[CCode (cname = "xcb_get_pointer_control_reply_t", ref_function = "", unref_function = "free")]
+	public class GetPointerControlReply : GenericReply {
+		public uint16 acceleration_numerator;
+		public uint16 acceleration_denominator;
+		public uint16 threshold;
+	}
 
 	[SimpleType]
 	[IntegerType (rank = 9)]
@@ -1040,11 +1038,11 @@ namespace Xcb {
 
 	[Compact]
 	[CCode (cname = "xcb_get_screen_saver_reply_t", ref_function = "", unref_function = "free")]
-	public class GetScreenSaverReply {
+	public class GetScreenSaverReply : GenericReply {
 		public uint16 timeout;
 		public uint16 interval;
-		public uint8 prefer_blanking;
-		public uint8 allow_exposures;
+		public bool prefer_blanking;
+		public bool allow_exposures;
 	}
 
 	[SimpleType]
@@ -1055,17 +1053,15 @@ namespace Xcb {
 
 	[Compact]
 	[CCode (cname = "xcb_list_hosts_reply_t", ref_function = "", unref_function = "free")]
-	public class ListHostsReply {
+	public class ListHostsReply : GenericReply {
 		private uint16 hosts_len;
 		[CCode (cname = "xcb_list_hosts_hosts_iterator")]
 		private HostIterator hosts_iterator ();
 		public Host[] hosts {
-			owned get
-			{
+			owned get {
 				var value = new Host[hosts_len];
 				var iter = hosts_iterator ();
-				for (var i = 0; i < value.length; i++)
-				{
+				for (var i = 0; i < value.length; i++) {
 					value[i] = iter.data;
 					HostIterator.next (ref iter);
 				}
@@ -1082,7 +1078,7 @@ namespace Xcb {
 
 	//[Compact]
 	//[CCode (cname = "xcb_set_pointer_mapping_reply_t", ref_function = "", unref_function = "free")]
-	//public class SetPointerMappingReply {
+	//public class SetPointerMappingReply : GenericReply {
 	//}
 
 	[SimpleType]
@@ -1093,7 +1089,7 @@ namespace Xcb {
 
 	//[Compact]
 	//[CCode (cname = "xcb_get_pointer_mapping_reply_t", ref_function = "", unref_function = "free")]
-	//public class GetPointerMappingReply {
+	//public class GetPointerMappingReply : GenericReply {
 	//}
 
 	[SimpleType]
@@ -1104,7 +1100,7 @@ namespace Xcb {
 
 	//[Compact]
 	//[CCode (cname = "xcb_set_modifier_mapping_reply_t", ref_function = "", unref_function = "free")]
-	//public class SetModifierMappingReply {
+	//public class SetModifierMappingReply : GenericReply {
 	//}
 
 	[SimpleType]
@@ -1115,7 +1111,7 @@ namespace Xcb {
 
 	//[Compact]
 	//[CCode (cname = "xcb_get_modifier_mapping_reply_t", ref_function = "", unref_function = "free")]
-	//public class GetModifierMappingReply {
+	//public class GetModifierMappingReply : GenericReply {
 	//}
 
 	[SimpleType]
@@ -1126,8 +1122,8 @@ namespace Xcb {
 
 	[Compact]
 	[CCode (cname = "xcb_translate_coordinates_reply_t", ref_function = "", unref_function = "free")]
-	public class TranslateCoordinatesReply {
-		public uint8 same_screen;
+	public class TranslateCoordinatesReply : GenericReply {
+		public bool same_screen;
 		public Window child;
 		public int16 dst_x;
 		public int16 dst_y;
@@ -1141,7 +1137,7 @@ namespace Xcb {
 
 	[Compact]
 	[CCode (cname = "xcb_get_input_focus_reply_t", ref_function = "", unref_function = "free")]
-	public class GetInputFocusReply {
+	public class GetInputFocusReply : GenericReply {
 		public InputFocus revert_to;
 		public Window focus;
 	}
@@ -1152,10 +1148,19 @@ namespace Xcb {
 	public struct QueryKeymapCookie {
 	}
 
-	//[Compact]
-	//[CCode (cname = "xcb_query_keymap_reply_t", ref_function = "", unref_function = "free")]
-	//public class QueryKeymapReply {
-	//}
+	[Compact]
+	[CCode (cname = "xcb_query_keymap_reply_t", ref_function = "", unref_function = "free")]
+	public class QueryKeymapReply : GenericReply {
+		[CCode (cname = "keys")]
+		private uint32* vala_keys;
+		public unowned uint32[] keys {
+			get {
+				unowned uint32[] res = (uint32[]) vala_keys;
+				res.length = 32;
+				return res;
+			}
+		}
+	}
 
 	[SimpleType]
 	[IntegerType (rank = 9)]
@@ -1165,25 +1170,23 @@ namespace Xcb {
 
 	[Compact]
 	[CCode (cname = "xcb_query_font_reply_t", ref_function = "", unref_function = "free")]
-	public class QueryFontReply {
+	public class QueryFontReply : GenericReply {
 		public Charinfo min_bounds;
 		public Charinfo max_bounds;
 		public uint16 min_char_or_byte2;
 		public uint16 max_char_or_byte2;
 		public uint16 default_char;
-		public uint8 draw_direction;
+		public FontDraw draw_direction;
 		public uint8 min_byte1;
 		public uint8 max_byte1;
-		public uint8 all_chars_exist;
+		public bool all_chars_exist;
 		public int16 font_ascent;
 		public int16 font_descent;
 		private uint16 properties_len;
 		[CCode (cname = "xcb_query_font_properties")]
 		private Fontprop* vala_properties ();
-		public Fontprop[] properties
-		{
-			get
-			{
+		public unowned Fontprop[] properties {
+			get {
 				unowned Fontprop[] res = (Fontprop[]) vala_properties ();
 				res.length = properties_len;
 				return res;
@@ -1192,10 +1195,8 @@ namespace Xcb {
 		private uint32 char_infos_len;
 		[CCode (cname = "xcb_query_font_char_infos")]
 		private Charinfo* vala_char_infos ();
-		public Charinfo[] char_infos
-		{
-			get
-			{
+		public unowned Charinfo[] char_infos {
+			get {
 				unowned Charinfo[] res = (Charinfo[]) vala_char_infos ();
 				res.length = (int) char_infos_len;
 				return res;
@@ -1211,7 +1212,7 @@ namespace Xcb {
 
 	[Compact]
 	[CCode (cname = "xcb_query_text_extents_reply_t", ref_function = "", unref_function = "free")]
-	public class QueryTextExtentsReply {
+	public class QueryTextExtentsReply : GenericReply {
 		public FontDraw draw_direction;
 		public int16 font_ascent;
 		public int16 font_descent;
@@ -1231,18 +1232,15 @@ namespace Xcb {
 
 	[Compact]
 	[CCode (cname = "xcb_list_fonts_reply_t", ref_function = "", unref_function = "free")]
-	public class ListFontsReply {
+	public class ListFontsReply : GenericReply {
 		private uint16 names_len;
 		[CCode (cname = "xcb_list_fonts_names_iterator")]
 		private StrIterator names_iterator ();
-		public string[] names
-		{
-			owned get
-			{
+		public string[] names {
+			owned get {
 				var value = new string[names_len];
 				var iter = names_iterator ();
-				for (var i = 0; i < value.length; i++)
-				{
+				for (var i = 0; i < value.length; i++) {
 					value[i] = iter.data.name;
 					StrIterator.next (ref iter);
 				}
@@ -1251,10 +1249,17 @@ namespace Xcb {
 		}
 	}
 
+	[SimpleType]
+	[IntegerType (rank = 9)]
+	[CCode (cname = "xcb_get_property_cookie_t", has_type_id = false)]
+	public struct GetPropertyCookie {
+	}
+
+	[Compact]
 	[CCode (cname = "xcb_get_property_reply_t", ref_function = "", unref_function = "free")]
-	public class GetPropertyReply {
+	public class GetPropertyReply : GenericReply {
 		public uint8 format;
-		public Atom type;
+		public AtomT type;
 		public uint32 bytes_after;
 		private uint32 value_len;
 		[CCode (cname = "xcb_get_property_value")]
@@ -1291,26 +1296,24 @@ namespace Xcb {
 
 	[Compact]
 	[CCode (cname = "xcb_list_fonts_with_info_reply_t", ref_function = "", unref_function = "free")]
-	public class ListFontsWithInfoReply {
+	public class ListFontsWithInfoReply : GenericReply {
 		public Charinfo min_bounds;
 		public Charinfo max_bounds;
 		public uint16 min_char_or_byte2;
 		public uint16 max_char_or_byte2;
 		public uint16 default_char;
-		public uint8 draw_direction;
+		public FontDraw draw_direction;
 		public uint8 min_byte1;
 		public uint8 max_byte1;
-		public uint8 all_chars_exist;
+		public bool all_chars_exist;
 		public int16 font_ascent;
 		public int16 font_descent;
 		public uint32 replies_hint;
 		private uint16 properties_len;
 		[CCode (cname = "xcb_list_fonts_with_info_properties")]
 		private Fontprop* vala_properties ();
-		public Fontprop[] properties
-		{
-			get
-			{
+		public unowned Fontprop[] properties {
+			get {
 				unowned Fontprop[] res = (Fontprop[]) vala_properties ();
 				res.length = properties_len;
 				return res;
@@ -1330,18 +1333,15 @@ namespace Xcb {
 
 	[Compact]
 	[CCode (cname = "xcb_get_font_path_reply_t", ref_function = "", unref_function = "free")]
-	public class GetFontPathReply {
+	public class GetFontPathReply : GenericReply {
 		private uint16 path_len;
 		[CCode (cname = "xcb_get_font_path_path_iterator")]
 		private StrIterator path_iterator ();
-		public string[] path
-		{
-			owned get
-			{
+		public string[] path {
+			owned get {
 				var value = new string[path_len];
 				var iter = path_iterator ();
-				for (var i = 0; i < value.length; i++)
-				{
+				for (var i = 0; i < value.length; i++) {
 					value[i] = iter.data.name;
 					StrIterator.next (ref iter);
 				}
@@ -1406,6 +1406,51 @@ namespace Xcb {
 		public int index;
 		[CCode (cname = "xcb_timecoord_next")]
 		public static void next (ref TimecoordIterator iter);
+ 	}
+
+	[CCode (cname = "xcb_motion_t", has_type_id = false)]
+	public enum Motion {
+		NORMAL,
+		HINT
+	}
+
+	[CCode (cname = "xcb_notify_detail_t", has_type_id = false)]
+	public enum NotifyDetail {
+		ANCESTOR,
+		VIRTUAL,
+		INFERIOR,
+		NONLINEAR,
+		NONLINEAR_VIRTUAL,
+		POINTER,
+		POINTER_ROOT,
+		NONE
+	}
+
+	[CCode (cname = "xcb_notify_mode_t", has_type_id = false)]
+	public enum NotifyMode {
+		NORMAL,
+		GRAB,
+		UNGRAB,
+		WHILE_GRABBED
+	}
+
+	[CCode (cname = "xcb_visibility_t", has_type_id = false)]
+	public enum Visibility {
+		UNOBSCURED,
+		PARTIALLY_OBSCURED,
+		FULLY_OBSCURED
+	}
+
+	[CCode (cname = "xcb_place_t", has_type_id = false)]
+	public enum Place {
+		ON_TOP,
+		ON_BOTTOM
+	}
+
+	[CCode (cname = "xcb_property_t", has_type_id = false)]
+	public enum Property {
+		NEW_VALUE,
+		DELETE
 	}
 
 	[CCode (cname = "xcb_atom_enum_t", has_type_id = false)]
@@ -1482,6 +1527,12 @@ namespace Xcb {
 		WM_TRANSIENT_FOR
 	}
 
+	[CCode (cname = "xcb_colormap_state_t", has_type_id = false)]
+	public enum ColormapState {
+		UNINSTALLED,
+		INSTALLED
+	}
+
 	public const uint8 KEY_PRESS;
 	public const uint8 KEY_RELEASE;
 	public const uint8 BUTTON_PRESS;
@@ -1533,6 +1584,41 @@ namespace Xcb {
 		MSB_FIRST
 	}
 
+	[CCode (cname = "xcb_mod_mask_t", has_type_id = false)]
+	public enum ModMask {
+		SHIFT,
+		LOCK,
+		CONTROL,
+		[CCode (cname = "XCB_MOD_MASK_1")]
+		MOD_1,
+		[CCode (cname = "XCB_MOD_MASK_2")]
+		MOD_2,
+		[CCode (cname = "XCB_MOD_MASK_3")]
+		MOD_3,
+		[CCode (cname = "XCB_MOD_MASK_4")]
+		MOD_4,
+		[CCode (cname = "XCB_MOD_MASK_5")]
+		MOD_5,
+		ANY
+	}
+
+	[CCode (cname = "xcb_key_but_mask_t", has_type_id = false)]
+	public enum KeyButMask {
+		SHIFT,
+		LOCK,
+		CONTROL,
+		MOD_1,
+		MOD_2,
+		MOD_3,
+		MOD_4,
+		MOD_5,
+		BUTTON_1,
+		BUTTON_2,
+		BUTTON_3,
+		BUTTON_4,
+		BUTTON_5
+	}
+
 	[Compact]
 	[CCode (cname = "xcb_setup_t", ref_function = "", unref_function = "")]
 	public class Setup {
@@ -1557,10 +1643,8 @@ namespace Xcb {
 		private uint8 pixmap_formats_len;
 		[CCode (cname = "xcb_setup_pixmap_formats")]
 		private Format* vala_pixmap_formats ();
-		public Format[] pixmap_formats
-		{
-			get
-			{
+		public unowned Format[] pixmap_formats {
+			get {
 				unowned Format[] res = (Format[]) vala_pixmap_formats ();
 				res.length = pixmap_formats_len;
 				return res;
@@ -1571,12 +1655,10 @@ namespace Xcb {
 		public int roots_length ();
 		public ScreenIterator roots_iterator ();
 		public Screen[] screens {
-			owned get
-			{
+			owned get {
 				var value = new Screen[roots_len];
 				var iter = roots_iterator ();
-				for (var i = 0; i < value.length; i++)
-				{
+				for (var i = 0; i < value.length; i++) {
 					value[i] = iter.data;
 					ScreenIterator.next (ref iter);
 				}
@@ -1595,7 +1677,7 @@ namespace Xcb {
 	}
 
 	[Compact]
-	[CCode (cname = "xcb_generic_event_t", ref_function = "", unref_function = "")]
+	[CCode (cname = "xcb_ge_generic_event_t", ref_function = "", unref_function = "")]
 	public class GenericEvent {
 		public uint8 response_type;
 		public uint8 extension;
@@ -1603,6 +1685,14 @@ namespace Xcb {
 		public uint32 length;
 		public uint16 event_type;
 		public uint32 full_sequence;
+	}
+
+	[Compact]
+	[CCode (cname = "xcb_generic_reply_t", ref_function = "", unref_function = "")]
+	public class GenericReply {
+		public uint8 response_type;
+		public uint16 sequence;
+		public uint32 length;
 	}
 
 	[SimpleType]
@@ -1624,7 +1714,6 @@ namespace Xcb {
 	[CCode (cname = "xcb_key_press_event_t", ref_function = "", unref_function = "")]
 	public class KeyPressEvent : GenericEvent {
 		public Keycode detail;
-		public uint16 sequence;
 		public Timestamp time;
 		public Window root;
 		public Window event;
@@ -1633,15 +1722,14 @@ namespace Xcb {
 		public uint16 root_y;
 		public uint16 event_x;
 		public uint16 event_y;
-		public uint16 state;
-		public uint8 same_screen;
+		public KeyButMask state;
+		public bool same_screen;
 	}
 
 	[Compact]
 	[CCode (cname = "xcb_key_release_event_t", ref_function = "", unref_function = "")]
 	public class KeyReleaseEvent : GenericEvent {
 		public Keycode detail;
-		public uint16 sequence;
 		public Timestamp time;
 		public Window root;
 		public Window event;
@@ -1650,8 +1738,8 @@ namespace Xcb {
 		public uint16 root_y;
 		public uint16 event_x;
 		public uint16 event_y;
-		public uint16 state;
-		public uint8 same_screen;
+		public KeyButMask state;
+		public bool same_screen;
 	}
 
 	[Compact]
@@ -1669,6 +1757,7 @@ namespace Xcb {
 	[CCode (cname = "xcb_button_press_event_t", ref_function = "", unref_function = "")]
 	public class ButtonPressEvent : GenericEvent {
 		public Button detail;
+		public Timestamp time;
 		public Window root;
 		public Window event;
 		public Window child;
@@ -1676,12 +1765,15 @@ namespace Xcb {
 		public uint16 root_y;
 		public uint16 event_x;
 		public uint16 event_y;
+		public KeyButMask state;
+		public bool same_screen;
 	}
 
 	[Compact]
 	[CCode (cname = "xcb_button_release_event_t", ref_function = "", unref_function = "")]
 	public class ButtonReleaseEvent : GenericEvent {
 		public Button detail;
+		public Timestamp time;
 		public Window root;
 		public Window event;
 		public Window child;
@@ -1689,13 +1781,14 @@ namespace Xcb {
 		public uint16 root_y;
 		public uint16 event_x;
 		public uint16 event_y;
+		public KeyButMask state;
+		public bool same_screen;
 	}
 
 	[Compact]
 	[CCode (cname = "xcb_motion_notify_event_t", ref_function = "", unref_function = "")]
 	public class MotionNotifyEvent : GenericEvent {
 		public uint8 detail;
-		public uint16 sequence;
 		public Timestamp time;
 		public Window root;
 		public Window event;
@@ -1705,13 +1798,12 @@ namespace Xcb {
 		public uint16 event_x;
 		public uint16 event_y;
 		public uint16 state;
-		public uint8 same_screen;
+		public bool same_screen;
 	}
 
 	[Compact]
 	[CCode (cname = "xcb_expose_event_t", ref_function = "", unref_function = "")]
 	public class ExposeEvent : GenericEvent {
-		public uint16 sequence;
 		public Window window;
 		public uint16 x;
 		public uint16 y;
@@ -1723,8 +1815,7 @@ namespace Xcb {
 	[Compact]
 	[CCode (cname = "xcb_enter_notify_event_t", ref_function = "", unref_function = "")]
 	public class EnterNotifyEvent : GenericEvent {
-		public uint8 detail;
-		public uint16 sequence;
+		public NotifyDetail detail;
 		public Timestamp time;
 		public Window root;
 		public Window event;
@@ -1734,15 +1825,14 @@ namespace Xcb {
 		public uint16 event_x;
 		public uint16 event_y;
 		public uint16 state;
-		public uint8 mode;
-		public uint8 same_screen_focus;
+		public NotifyMode mode;
+		public bool same_screen_focus;
 	}
 
 	[Compact]
 	[CCode (cname = "xcb_leave_notify_event_t", ref_function = "", unref_function = "")]
 	public class LeaveNotifyEvent : GenericEvent {
-		public uint8 detail;
-		public uint16 sequence;
+		public NotifyDetail detail;
 		public Timestamp time;
 		public Window root;
 		public Window event;
@@ -1752,8 +1842,8 @@ namespace Xcb {
 		public uint16 event_x;
 		public uint16 event_y;
 		public uint16 state;
-		public uint8 mode;
-		public uint8 same_screen_focus;
+		public NotifyMode mode;
+		public bool same_screen_focus;
 	}
 
 	[Compact]
@@ -1765,16 +1855,13 @@ namespace Xcb {
 	[Compact]
 	[CCode (cname = "xcb_visibility_notify_event_t", ref_function = "", unref_function = "")]
 	public class VisibilityNotifyEvent : GenericEvent {
-		uint16 sequence;
 		public Window window;
-		public uint8 state;
+		public Visibility state;
 	}
 
 	[Compact]
 	[CCode (cname = "xcb_create_notify_event_t", ref_function = "", unref_function = "")]
-	public class CreateNotifyEvent {
-		public uint8 response_type;
-		public uint16 sequence;
+	public class CreateNotifyEvent : GenericEvent {
 		public Window parent;
 		public Window window;
 		public int16 x;
@@ -1782,43 +1869,35 @@ namespace Xcb {
 		public uint16 width;
 		public uint16 height;
 		public uint16 border_width;
-		public uint8 override_redirect;
+		public bool override_redirect;
 	}
 
 	[Compact]
 	[CCode (cname = "xcb_destroy_notify_event_t", ref_function = "", unref_function = "")]
-	public class DestroyNotifyEvent {
-		public uint8 response_type;
-		public uint16 sequence;
+	public class DestroyNotifyEvent : GenericEvent {
 		public Window event;
 		public Window window;
 	}
 
 	[Compact]
 	[CCode (cname = "xcb_unmap_notify_event_t", ref_function = "", unref_function = "")]
-	public class UnmapNotifyEvent {
-		public uint8 response_type;
-		public uint16 sequence;
+	public class UnmapNotifyEvent : GenericEvent {
 		public Window event;
 		public Window window;
-		public uint8 from_configure;
+		public bool from_configure;
 	}
 
 	[Compact]
 	[CCode (cname = "xcb_map_notify_event_t", ref_function = "", unref_function = "")]
-	public class MapNotifyEvent {
-		public uint8 response_type;
-		public uint16 sequence;
+	public class MapNotifyEvent : GenericEvent {
 		public Window event;
 		public Window window;
-		public uint8 override_redirect;
+		public bool override_redirect;
 	}
 
 	[Compact]
 	[CCode (cname = "xcb_map_request_event_t", ref_function = "", unref_function = "")]
-	public class MapRequestEvent {
-		public uint8 response_type;
-		public uint16 sequence;
+	public class MapRequestEvent : GenericEvent {
 		public Window parent;
 		public Window window;
 	}
@@ -1826,21 +1905,18 @@ namespace Xcb {
 	[Compact]
 	[CCode (cname = "xcb_reparent_notify_event_t", ref_function = "", unref_function = "")]
 	public class ReparentNotifyEvent : GenericEvent {
-		uint16 sequence;
 		public Window event;
 		public Window window;
 		public Window parent;
 		public int16 x;
 		public int16 y;
-		public uint8 override_redirect;
+		public bool override_redirect;
 	}
 
 	[Compact]
 	[CCode (cname = "xcb_configure_request_event_t", ref_function = "", unref_function = "")]
-	public class ConfigureRequestEvent {
-		public uint8 response_type;
+	public class ConfigureRequestEvent : GenericEvent {
 		public uint8 stack_mode;
-		public uint16 sequence;
 		public Window parent;
 		public Window window;
 		public Window sibling;
@@ -1849,29 +1925,26 @@ namespace Xcb {
 		public uint16 width;
 		public uint16 height;
 		public uint16 border_width;
-		public uint16 value_mask;
+		public ConfigWindow value_mask;
 	}
 
 	[Compact]
 	[CCode (cname = "xcb_configure_notify_event_t", ref_function = "", unref_function = "")]
-	public class ConfigureNotifyEvent {
-		public uint8      response_type;
-		public uint16     sequence;
-		public Window     event;
-		public Window     window;
-		public Window     above_sibling;
-		public int16      x;
-		public int16      y;
-		public uint16     width;
-		public uint16     height;
-		public uint16     border_width;
-		public uint8      override_redirect;
+	public class ConfigureNotifyEvent : GenericEvent {
+		public Window event;
+		public Window window;
+		public Window above_sibling;
+		public int16 x;
+		public int16 y;
+		public uint16 width;
+		public uint16 height;
+		public uint16 border_width;
+		public bool override_redirect;
 	}
 
 	[Compact]
 	[CCode (cname = "xcb_gravity_notify_event_t", ref_function = "", unref_function = "")]
 	public class GravityNotifyEvent : GenericEvent {
-		uint16 sequence;
 		public Window event;
 		public Window window;
 		public int16 x;
@@ -1881,26 +1954,23 @@ namespace Xcb {
 	[Compact]
 	[CCode (cname = "xcb_circulate_notify_event_t", ref_function = "", unref_function = "")]
 	public class CirculateNotifyEvent : GenericEvent {
-		uint16 sequence;
 		public Window event;
 		public Window window;
-		public uint8 place;
+		public Place place;
 	}
 
 	[Compact]
 	[CCode (cname = "xcb_property_notify_event_t", ref_function = "", unref_function = "")]
 	public class PropertyNotifyEvent : GenericEvent {
-		uint16 sequence;
 		public Window window;
 		public AtomT atom;
 		public Timestamp time;
-		public uint8 state;
+		public Property state;
 	}
 
 	[Compact]
 	[CCode (cname = "xcb_selection_notify_event_t", ref_function = "", unref_function = "")]
 	public class SelectionNotifyEvent : GenericEvent {
-		uint16 sequence;
 		public Timestamp time;
 		public Window requestor;
 		public AtomT selection;
@@ -1911,17 +1981,15 @@ namespace Xcb {
 	[Compact]
 	[CCode (cname = "xcb_colormap_notify_event_t", ref_function = "", unref_function = "")]
 	public class ColormapNotifyEvent : GenericEvent {
-		uint16 sequence;
 		public Window window;
 		public Colormap colormap;
-		public uint8 _new;
-		public uint8 state;
+		public bool _new;
+		public ColormapState state;
 	}
 
 	[Compact]
 	[CCode (cname = "xcb_mapping_notify_event_t", ref_function = "", unref_function = "")]
 	public class MappingNotifyEvent : GenericEvent {
-		uint16 sequence;
 		public uint8 request;
 		public Keycode first_keycode;
 		public uint8 count;
@@ -2014,14 +2082,11 @@ namespace Xcb {
 		public uint8 root_depth;
 		private uint8 allowed_depths_len;
 		public DepthIterator allowed_depths_iterator ();
-		public Depth[] allowed_depths
-		{
-			owned get
-			{
+		public Depth[] allowed_depths {
+			owned get {
 				var value = new Depth[allowed_depths_len];
 				var iter = allowed_depths_iterator ();
-				for (var i = 0; i < value.length; i++)
-				{
+				for (var i = 0; i < value.length; i++) {
 					value[i] = iter.data;
 					DepthIterator.next (ref iter);
 				}
@@ -2047,8 +2112,7 @@ namespace Xcb {
 		private uint16 visuals_len;
 		[CCode (cname = "xcb_depth_visuals")]
 		private VisualType* vala_visuals ();
-		public VisualType[] visuals
-		{
+		public unowned VisualType[] visuals {
 			get {
 				unowned VisualType[] res = (VisualType[]) vala_visuals ();
 				res.length = (int) visuals_len;
@@ -2061,12 +2125,19 @@ namespace Xcb {
 
 	[Compact]
 	[CCode (cname = "xcb_query_tree_reply_t", ref_function = "", unref_function = "")]
-	public class QueryTreeReply {
+	public class QueryTreeReply : GenericReply {
 		public Window root;
 		public Window parent;
-		public uint16 children_len;
+		private uint16 children_len;
 		[CCode (cname = "xcb_query_tree_children", array_length = false)]
-		public Window* children ();
+		private Window* vala_children ();
+		public unowned Window[] children {
+			get {
+				unowned Window[] res = (Window[]) vala_children ();
+				res.length = children_len;
+				return res;
+			}
+		}
 	}
 
 	[SimpleType]
@@ -2091,7 +2162,7 @@ namespace Xcb {
 	[Deprecated (since = "vala-0.14", replacement = "Xcb.Connection")]
 	public Connection connect (string? display = null, out int screen = null);
 	[Deprecated (since = "vala-0.14", replacement = "Xcb.Connection.create_window")]
-	public VoidCookie create_window (Connection connection, uint8 depth, Window wid, Window parent, int16 x, int16 y, uint16 width, uint16 height, uint16 border_width, uint16 _class, VisualID visual, uint32 value_mask, [CCode (array_length = false)] uint32[] value_list);
+	public VoidCookie create_window (Connection connection, uint8 depth, Window window, Window parent, int16 x, int16 y, uint16 width, uint16 height, uint16 border_width, uint16 _class, VisualID visual, uint32 value_mask, [CCode (array_length = false)] uint32[] value_list);
 	[Deprecated (since = "vala-0.14", replacement = "Xcb.Connection.map_window")]
 	public VoidCookie map_window (Connection connection, Window wid);
 
@@ -2143,6 +2214,11 @@ namespace Xcb {
 	}
 
 	[SimpleType]
+	[CCode (cname = "xcb_keysym_t", has_type_id = false)]
+	public struct KeySym : uint32 {
+	}
+
+	[SimpleType]
 	[CCode (cname = "xcb_button_t", has_type_id = false)]
 	public struct Button : uint8 {
 	}
@@ -2191,12 +2267,24 @@ namespace Xcb {
 	[CCode (cname = "xcb_visualtype_t", has_type_id = false)]
 	public struct VisualType {
 		public VisualID visual_id;
-		public uint8 _class;
+		public VisualClass _class;
 		public uint8 bits_per_rgb_value;
 		public uint16 colormap_entries;
 		public uint32 red_mask;
 		public uint32 green_mask;
 		public uint32 blue_mask;
+	}
+
+	[CCode (cname = "xcb_allow_t", has_type_id = false)]
+	public enum Allow {
+		ASYNC_POINTER,
+		SYNC_POINTER,
+		REPLAY_POINTER,
+		ASYNC_KEYBOARD,
+		SYNC_KEYBOARD,
+		REPLAY_KEYBOARD,
+		ASYNC_BOTH,
+		SYNC_BOTH
 	}
 
 	[CCode (cname = "xcb_input_focus_t", has_type_id = false)]
@@ -2214,8 +2302,7 @@ namespace Xcb {
 	}
 
 	[CCode (cname = "xcb_gc_t", has_type_id = false)]
-	public enum GC
-	{
+	public enum GC {
 		FUNCTION,
 		PLANE_MASK,
 		FOREGROUND,
@@ -2242,8 +2329,7 @@ namespace Xcb {
 	}
 
 	[CCode (cname = "xcb_gx_t", has_type_id = false)]
-	public enum GX
-	{
+	public enum GX {
 		CLEAR,
 		AND,
 		AND_REVERSE,
@@ -2263,16 +2349,14 @@ namespace Xcb {
 	}
 
 	[CCode (cname = "xcb_line_style_t", has_type_id = false)]
-	public enum LineStyle
-	{
+	public enum LineStyle {
 		SOLID,
 		ON_OFF_DASH,
 		DOUBLE_DASH
 	}
 
 	[CCode (cname = "xcb_cap_style_t", has_type_id = false)]
-	public enum CapStyle
-	{
+	public enum CapStyle {
 		NOT_LAST,
 		BUTT,
 		ROUND,
@@ -2280,16 +2364,14 @@ namespace Xcb {
 	}
 
 	[CCode (cname = "xcb_join_style_t", has_type_id = false)]
-	public enum JoinStyle
-	{
+	public enum JoinStyle {
 		MITER,
 		ROUND,
 		BEVEL
 	}
 
 	[CCode (cname = "xcb_fill_style_t", has_type_id = false)]
-	public enum FillStyle
-	{
+	public enum FillStyle {
 		SOLID,
 		TILED,
 		STIPPLED,
@@ -2297,29 +2379,25 @@ namespace Xcb {
 	}
 
 	[CCode (cname = "xcb_fill_rule_t", has_type_id = false)]
-	public enum FillRuleStyle
-	{
+	public enum FillRuleStyle {
 		EVEN_ODD,
 		WINDING
 	}
 
 	[CCode (cname = "xcb_subwindow_mode_t", has_type_id = false)]
-	public enum SubwindowMode
-	{
+	public enum SubwindowMode {
 		CLIP_BY_CHILDREN,
 		INCLUDE_INFERIORS
 	}
 
 	[CCode (cname = "xcb_arc_mode_t", has_type_id = false)]
-	public enum ArcMode
-	{
+	public enum ArcMode {
 		CHORD,
 		PIE_SLICE
 	}
 
 	[CCode (cname = "xcb_clip_ordering_t", has_type_id = false)]
-	public enum ClipOrdering
-	{
+	public enum ClipOrdering {
 		UNSORTED,
 		Y_SORTED,
 		YX_SORTED,
@@ -2327,31 +2405,27 @@ namespace Xcb {
 	}
 
 	[CCode (cname = "xcb_coord_mode_t", has_type_id = false)]
-	public enum CoordMode
-	{
+	public enum CoordMode {
 		ORIGIN,
 		PREVIOUS
 	}
 
 	[CCode (cname = "xcb_poly_shape_t", has_type_id = false)]
-	public enum PolyShape
-	{
+	public enum PolyShape {
 		COMPLEX,
 		NONCONVEX,
 		CONVEX
 	}
 
 	[CCode (cname = "xcb_image_format_t", has_type_id = false)]
-	public enum ImageFormat
-	{
+	public enum ImageFormat {
 		XY_BITMAP,
 		XY_PIXMAP,
 		Z_PIXMAP
 	}
 
 	[CCode (cname = "xcb_color_flag_t", has_type_id = false)]
-	public enum ColorFlag
-	{
+	public enum ColorFlag {
 		RED,
 		GREEN,
 		BLUE
@@ -2375,23 +2449,52 @@ namespace Xcb {
 		public uint16 blue;
 	}
 
+	[CCode (cname = "xcb_query_shape_of_t", has_type_id = false)]
+	public enum QueryShapeOf {
+		LARGEST_CURSOR,
+		FASTEST_TILE,
+		FASTEST_STIPPLE
+	}
+
+	[CCode (cname = "xcb_kb_t", has_type_id = false)]
+	public enum KB {
+		KEY_CLICK_PERCENT,
+		BELL_PERCENT,
+		BELL_PITCH,
+		BELL_DURATION,
+		LED,
+		LED_MODE,
+		KEY,
+		AUTO_REPEAT_MODE
+	}
+
+	[CCode (cname = "xcb_led_mode_t", has_type_id = false)]
+	public enum LedMode {
+		OFF,
+		ON
+	}
+
+	[CCode (cname = "xcb_auto_repeat_mode_t", has_type_id = false)]
+	public enum AutoRepeatMode {
+		OFF,
+		ON,
+		DEFAULT
+	}
+
 	[CCode (cname = "xcb_set_mode_t", has_type_id = false)]
-	public enum SetMode
-	{
+	public enum SetMode {
 		INSERT,
 		DELETE
 	}
 
 	[CCode (cname = "xcb_host_mode_t", has_type_id = false)]
-	public enum HostMode
-	{
+	public enum HostMode {
 		INSERT,
 		DELETE
 	}
 
 	[CCode (cname = "xcb_family_t", has_type_id = false)]
-	public enum Family
-	{
+	public enum Family {
 		INTERNET,
 		DECNET,
 		CHAOS,
@@ -2400,23 +2503,20 @@ namespace Xcb {
 	}
 
 	[CCode (cname = "xcb_access_control_t", has_type_id = false)]
-	public enum AccessControl
-	{
+	public enum AccessControl {
 		DISABLE,
 		ENABLE
 	}
 
 	[CCode (cname = "xcb_close_down_t", has_type_id = false)]
-	public enum CloseDown
-	{
+	public enum CloseDown {
 		DESTROY_ALL,
 		RETAIN_PERMANENT,
 		RETAIN_TEMPORARY
 	}
 
 	[CCode (cname = "xcb_screen_saver_t", has_type_id = false)]
-	public enum ScreenSaver
-	{
+	public enum ScreenSaver {
 		RESET,
 		ACTIVE
 	}
@@ -2447,10 +2547,8 @@ namespace Xcb {
 		private uint16 address_len;
 		[CCode (cname = "xcb_host_address")]
 		public unowned uint8* vala_address ();
-		public uint8[] address
-		{
-			get
-			{
+		public unowned uint8[] address {
+			get {
 				unowned uint8[] res = (uint8[]) vala_address ();
 				res.length = address_len;
 				return res;
