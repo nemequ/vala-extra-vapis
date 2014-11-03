@@ -25,7 +25,7 @@ namespace Cairo {
 	[CCode (cname = "cairo_surface_t", cheader_filename = "cairo-xcb.h")]
 	public class XcbSurface : Surface {
 		[CCode (cname = "cairo_xcb_surface_create")]
-		public XcbSurface (Xcb.Connection connection, Xcb.Drawable drawable, Xcb.VisualType visual, int width, int height);
+		public XcbSurface (Xcb.Connection connection, Xcb.Drawable drawable, Xcb.VisualType? visual, int width, int height);
 		public void set_size (int width, int height);
 	}
 }
