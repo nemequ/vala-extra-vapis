@@ -26,7 +26,7 @@
 
 [CCode (cheader_filename = "gcrypt.h", lower_case_cprefix = "gcry_")]
 namespace GCrypt {
-	[CCode (cname = "gpg_error_source_t", cprefix = "GPG_ERR_SOURCE_")]
+	[CCode (cname = "gpg_err_source_t", cprefix = "GPG_ERR_SOURCE_")]
 	public enum ErrorSource {
 		UNKNOWN,
 		GCRYPT,
@@ -50,7 +50,7 @@ namespace GCrypt {
 		DIM
 	}
 
-	[CCode (cname = "gpg_error_code_t", cprefix = "GPG_ERR_")]
+	[CCode (cname = "gpg_err_code_t", cprefix = "GPG_ERR_")]
 	public enum ErrorCode {
 		NO_ERROR,
 		GENERAL,
@@ -499,7 +499,7 @@ namespace GCrypt {
 		FAST_POLL
 	}
 	public Error control (ControlCommand cmd, ...);
-	
+
 	[CCode (lower_case_cname = "cipher_")]
 	namespace Cipher {
 		[CCode (cname = "enum gcry_cipher_algos", cprefix = "GCRY_CIPHER_")]
@@ -530,7 +530,7 @@ namespace GCrypt {
 			RIJNDAEL128,
 			RIJNDAEL192,
 			RIJNDAEL256;
-			
+
 			[CCode (cname = "gcry_cipher_algo_info")]
 			public Error info (ControlCommand what, ref uchar[] buffer);
 			[CCode (cname = "gcry_cipher_algo_name")]
@@ -540,7 +540,7 @@ namespace GCrypt {
 			[CCode (cname = "gcry_cipher_map_oid")]
 			public static Algorithm from_oid (string oid);
 		}
-		
+
 		[CCode (cname = "enum gcry_cipher_modes", cprefix = "GCRY_CIPHER_MODE_")]
 		public enum Mode {
 			NONE,   /* Not yet specified. */
@@ -570,7 +570,7 @@ namespace GCrypt {
 
 			public Error encrypt (uchar[] out_buffer, uchar[] in_buffer);
 			public Error decrypt (uchar[] out_buffer, uchar[] in_buffer);
-			
+
 			[CCode (cname = "gcry_cipher_setkey")]
 			public Error set_key (uchar[] key_data);
 			[CCode (cname = "gcry_cipher_setiv")]
@@ -604,7 +604,7 @@ namespace GCrypt {
 			WHIRLPOOL,
 			TIGER1,
 			TIGER2;
-			
+
 			[CCode (cname = "gcry_md_get_algo_dlen")]
 			public size_t get_digest_length ();
 			[CCode (cname = "gcry_md_algo_info")]
@@ -618,7 +618,7 @@ namespace GCrypt {
 			[CCode (cname = "gcry_md_get_asnoid")]
 			public Error get_oid (uchar[] buffer);
 		}
-		
+
 		[CCode (cname = "enum gcry_md_flags", cprefix = "GCRY_MD_FLAG")]
 		public enum Flag {
 			SECURE,
@@ -658,7 +658,7 @@ namespace GCrypt {
 			[CCode (cname = "GCRY_VERY_STRONG_RANDOM")]
 			VERY_STRONG
 		}
-		
+
 		[CCode (cname = "gcry_randomize")]
 		public static void randomize (uchar[] buffer, Level level = Level.VERY_STRONG);
 		[CCode (cname = "gcry_fast_random_poll")]
