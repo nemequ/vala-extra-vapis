@@ -22,24 +22,24 @@
  * SOFTWARE.
  */
 
-[CCode (cheader_filename = "event2/event.h")]
-namespace Event {
+[CCode (cheader_filename = "event2/event.h", lower_case_cprefix = "event_")]
+namespace LibEvent {
   [Compact, CCode (cname = "struct event_base", cheader_filename = "event2/event.h")]
   public class Base {
     public Base ();
-    public Base.with_config (Event.Config cfg);
+    public Base.with_config (LibEvent.Config cfg);
     [CCode (cname = "event_reinit")]
     public int reinit ();
     public int dispatch ();
     public unowned string get_method ();
     public int get_features ();
-    public void set (Event.Event event);
-    public int loop (Event.LoopFlags flags);
+    public void set (LibEvent.Event event);
+    public int loop (LibEvent.LoopFlags flags);
     public int loopexit (GLib.TimeVal tv);
     public int loopbreak ();
     public bool got_exit ();
     public bool got_break ();
-    public int once (Event.Base base, Event.Util.Socket fd, short event, Event.OccuredCallback cb, GLib.TimeVal tv);
+    public int once (LibEvent.Base base, LibEvent.Util.Socket fd, short event, LibEvent.OccuredCallback cb, GLib.TimeVal tv);
     public int priority_init (int npriorities);
     public unowned GLib.TimeVal init_common_timeout (GLib.TimeVal duration);
     public void dump_events (GLib.FileStream file);
@@ -54,15 +54,15 @@ namespace Event {
 
   [Compact, CCode (cname = "struct event", cprefix = "event_")]
   public class Event {
-    public Event (Event.Base base, Event.Util.Socket fd, short event, Event.OccuredCallback cb);
-    public int assign (Event.Base base, Event.Util.Socket fd, short event, Event.OccuredCallback cb);
+    public Event (LibEvent.Base base, LibEvent.Util.Socket fd, short event, LibEvent.OccuredCallback cb);
+    public int assign (LibEvent.Base base, LibEvent.Util.Socket fd, short event, LibEvent.OccuredCallback cb);
     public int add (GLib.TimeVal tv);
     public int del ();
     public int active (int res, short ncalls);
-    public int pending (Event.Flags what, GLib.TimeVal tv);
+    public int pending (LibEvent.Flags what, GLib.TimeVal tv);
     public bool initialized ();
-    public Event.Util.Socket get_fd ();
-    public Event.Base get_base ();
+    public LibEvent.Util.Socket get_fd ();
+    public LibEvent.Base get_base ();
     public int priority_set (int priority);
   }
 
@@ -106,11 +106,11 @@ namespace Event {
   }
 
   [CCode (cname = "event_log_cb", has_target = false)]
-  public delegate void LogCallback (Event.LogSeverity severity, string message);
+  public delegate void LogCallback (LibEvent.LogSeverity severity, string message);
   [CCode (cname = "event_fatal_cb", has_target = false)]
   public delegate void FatalCallback (int err);
   [CCode (cname = "void (*)(evutil_socket_t, short, void *)")]
-  public delegate void OccuredCallback (Event.Util.Socket socket, short event);
+  public delegate void OccuredCallback (LibEvent.Util.Socket socket, short event);
 
   [CCode (cname = "void *(*)(size_t)")]
   public delegate void* MallocFunc (size_t sz);
@@ -120,11 +120,11 @@ namespace Event {
   public delegate void FreeFunc (void* ptr);
 
   public static unowned string[] get_supported_methods ();
-  public static void set_log_callback (Event.LogCallback cb);
-  public static void set_fatal_callback (Event.FatalCallback cb);
+  public static void set_log_callback (LibEvent.LogCallback cb);
+  public static void set_fatal_callback (LibEvent.FatalCallback cb);
   public static unowned string get_version ();
   public static uint32 get_version_number ();
-  public static void set_mem_functions (Event.MallocFunc malloc_fn, Event.ReallocFunc realloc_fn, Event.FreeFunc free_fn);
+  public static void set_mem_functions (LibEvent.MallocFunc malloc_fn, LibEvent.ReallocFunc realloc_fn, LibEvent.FreeFunc free_fn);
 
   [CCode (cname ="LIBEVENT_VERSION")]
   public const int VERSION;
@@ -137,7 +137,7 @@ namespace Event {
     [SimpleType, CCode (cname = "evutil_socket_t")]
     public struct Socket {
       [CCode (cname = "evutil_socketpair")]
-      public static int create_pair (int d, int type, int protocol, [CCode (array_length = false)] Event.Util.Socket sv[2]);
+      public static int create_pair (int d, int type, int protocol, [CCode (array_length = false)] LibEvent.Util.Socket sv[2]);
       [CCode (cname = "evutil_make_socket_nonblocking")]
       public int make_nonblocking ();
       [CCode (cname = "evutil_make_listen_socket_reuseable")]
