@@ -44,6 +44,7 @@ namespace Memcached {
     public uint32 server_count ();
     public uint64 query_id ();
 
+    // auto.h
     public Memcached.ReturnCode increment ([CCode (array_length_type = "size_t")] uint8[] key, uint32 offset, out uint64 value);
     public Memcached.ReturnCode increment_by_key ([CCode (array_length_type = "size_t")] uint8[] group_key, [CCode (array_length_type = "size_t")] uint8[] key, uint64 offset, out uint64 value);
     public Memcached.ReturnCode increment_with_initial ([CCode (array_length_type = "size_t")] uint8[] key, uint64 offset, uint64 initial, time_t expiration, out uint64 value);
@@ -52,15 +53,42 @@ namespace Memcached {
     public Memcached.ReturnCode decrement_by_key ([CCode (array_length_type = "size_t")] uint8[] group_key, [CCode (array_length_type = "size_t")] uint8[] key, uint64 offset, out uint64 value);
     public Memcached.ReturnCode decrement_with_initial ([CCode (array_length_type = "size_t")] uint8[] key, uint64 offset, uint64 initial, time_t expiration, out uint64 value);
     public Memcached.ReturnCode decrement_with_initial_by_key ([CCode (array_length_type = "size_t")] uint8[] group_key, [CCode (array_length_type = "size_t")] uint8[] key, uint64 offset, uint64 initial, time_t expiration, out uint64 value);
+
+    // delete.h
     public Memcached.ReturnCode @delete ([CCode (array_length_type = "size_t")] uint8[] key, time_t expiration);
     public Memcached.ReturnCode delete_by_key ([CCode (array_length_type = "size_t")] uint8[] group_key, [CCode (array_length_type = "size_t")] uint8[] key, time_t expiration);
+
+    // exist.h
     public Memcached.ReturnCode exist ([CCode (array_length_type = "size_t")] uint8[] key);
     public Memcached.ReturnCode exist_by_key ([CCode (array_length_type = "size_t")] uint8[] group_key, [CCode (array_length_type = "size_t")] uint8[] key);
+
+    // flush_buffers.h
     public Memcached.ReturnCode flush_buffers ();
+
+    // flush.h
     public Memcached.ReturnCode flush (time_t expiration);
+
+    // get.h
     [CCode (array_length_pos = 1.5, array_length_type = "size_t")]
     public uint8[] get (uint8[] key, out uint32 flags, out Memcached.ReturnCode error);
     public Memcached.ReturnCode mget ([CCode (array_length_type = "size_t", array_length_pos = 2.5)] uint8*[] keys, [CCode (array_length = false)] size_t[] keys_length);
+
+    // storage.h
+    public Memcached.ReturnCode @set ([CCode (array_length_type = "size_t")] uint8[] key, [CCode (array_length_type = "size_t")] uint8[] value, time_t expiration, uint32 flags);
+    public Memcached.ReturnCode add ([CCode (array_length_type = "size_t")] uint8[] key, [CCode (array_length_type = "size_t")] uint8[] value, time_t expiration, uint32 flags);
+    public Memcached.ReturnCode replace ([CCode (array_length_type = "size_t")] uint8[] key, [CCode (array_length_type = "size_t")] uint8[] value, time_t expiration, uint32 flags);
+    public Memcached.ReturnCode append ([CCode (array_length_type = "size_t")] uint8[] key, [CCode (array_length_type = "size_t")] uint8[] value, time_t expiration, uint32 flags);
+    public Memcached.ReturnCode prepend ([CCode (array_length_type = "size_t")] uint8[] key, [CCode (array_length_type = "size_t")] uint8[] value, time_t expiration, uint32 flags);
+    public Memcached.ReturnCode cas ([CCode (array_length_type = "size_t")] uint8[] key, [CCode (array_length_type = "size_t")] uint8[] value, time_t expiration, uint32 flags, uint64 cas);
+    public Memcached.ReturnCode set_by_key ([CCode (array_length_type = "size_t")] uint8[] group_key, [CCode (array_length_type = "size_t")] uint8[] key, [CCode (array_length_type = "size_t")] uint8[] value, time_t expiration, uint32 flags);
+    public Memcached.ReturnCode add_by_key ([CCode (array_length_type = "size_t")] uint8[] group_key, [CCode (array_length_type = "size_t")] uint8[] key, [CCode (array_length_type = "size_t")] uint8[] value, time_t expiration, uint32 flags);
+    public Memcached.ReturnCode prepend_by_key ([CCode (array_length_type = "size_t")] uint8[] group_key, [CCode (array_length_type = "size_t")] uint8[] key, [CCode (array_length_type = "size_t")] uint8[] value, time_t expiration, uint32 flags);
+    public Memcached.ReturnCode append_by_key ([CCode (array_length_type = "size_t")] uint8[] group_key, [CCode (array_length_type = "size_t")] uint8[] key, [CCode (array_length_type = "size_t")] uint8[] value, time_t expiration, uint32 flags);
+    public Memcached.ReturnCode cas_by_key ([CCode (array_length_type = "size_t")] uint8[] group_key, [CCode (array_length_type = "size_t")] uint8[] key, [CCode (array_length_type = "size_t")] uint8[] value, time_t expiration, uint32 flags, uint64 cas);
+
+    // touch.h
+    public Memcached.ReturnCode touch ([CCode (array_length_type = "size_t")] uint8[] key, time_t expiration, uint32 flags);
+    public Memcached.ReturnCode touch_by_key ([CCode (array_length_type = "size_t")] uint8[] group_key, [CCode (array_length_type = "size_t")] uint8[] key, time_t expiration, uint32 flags);
   }
 
   [Compact]
