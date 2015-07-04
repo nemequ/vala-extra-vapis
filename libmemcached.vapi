@@ -24,14 +24,21 @@
 
 [CCode (cheader_filename = "libmemcached/memcached.h")]
 namespace Memcached {
+
+  public const in_port_t DEFAULT_PORT;
+
+  [SimpleType]
+  [IntegerType (rank = 6), CCode (cname = "in_port_t")]
+  public struct in_port_t {}
+
   [Compact, CCode (cname = "memcached_st", lower_case_cprefix = "memcached_")]
   public class Context {
-    [CCode (cname = "memcached")]
-    public Context (string? str = null, size_t length = 0);
+    // memcached.h
+    public void servers_reset ();
     [CCode (cname = "memcached_create")]
     private static Memcached.Context _create (Memcached.Context? ptr = null);
-    public void servers_reset ();
-    // public Memcached.Context create ();
+    [CCode (cname = "memcached")]
+    public Context (string? str = null, size_t length = 0);
     public Memcached.ReturnCode reset ();
     public void reset_last_disconnected_server ();
     [CCode (cname = "_vala_memcached_clone")]
@@ -40,7 +47,8 @@ namespace Memcached {
     }
     public void set_user_data<T> (T data);
     public T get_user_data<T> ();
-    // public Memcached.ServerInstance server_instance_by_position (uint32 server_key);
+    public Memcached.ReturnCode push (Memcached.Context source);
+    public Memcached.Instance server_instance_by_position (uint32 server_key);
     public uint32 server_count ();
     public uint64 query_id ();
 
@@ -73,6 +81,19 @@ namespace Memcached {
     public uint8[] get (uint8[] key, out uint32 flags, out Memcached.ReturnCode error);
     public Memcached.ReturnCode mget ([CCode (array_length_type = "size_t", array_length_pos = 2.5)] uint8*[] keys, [CCode (array_length = false)] size_t[] keys_length);
 
+    // server.h
+    public Memcached.Instance server_by_key ([CCode (array_length_type = "size_t")] uint8[] key, out Memcached.ReturnCode error);
+    public Memcached.Instance server_get_last_disconnected ();
+    public Memcached.ReturnCode server_add_udp (string hostname, in_port_t port = Memcached.DEFAULT_PORT);
+    public Memcached.ReturnCode server_add_unix_socket (string filename);
+    public Memcached.ReturnCode server_add (string hostname, in_port_t port = Memcached.DEFAULT_PORT);
+    public Memcached.ReturnCode server_add_udp_with_weight (string hostname, in_port_t port, uint32 weight);
+    public Memcached.ReturnCode server_add_unix_socket_with_weight (string filename, uint32 weight);
+    public Memcached.ReturnCode server_add_with_weight (string hostname, in_port_t port, uint32 weight);
+
+    // server_list.h
+    public Memcached.ReturnCode server_push (Memcached.ServerList list);
+
     // storage.h
     public Memcached.ReturnCode @set ([CCode (array_length_type = "size_t")] uint8[] key, [CCode (array_length_type = "size_t")] uint8[] value, time_t expiration, uint32 flags);
     public Memcached.ReturnCode add ([CCode (array_length_type = "size_t")] uint8[] key, [CCode (array_length_type = "size_t")] uint8[] value, time_t expiration, uint32 flags);
@@ -89,8 +110,12 @@ namespace Memcached {
     // touch.h
     public Memcached.ReturnCode touch ([CCode (array_length_type = "size_t")] uint8[] key, time_t expiration, uint32 flags);
     public Memcached.ReturnCode touch_by_key ([CCode (array_length_type = "size_t")] uint8[] group_key, [CCode (array_length_type = "size_t")] uint8[] key, time_t expiration, uint32 flags);
+
+    // quit.h
+    public void quit ();
   }
 
+  // result.h
   [Compact]
   public class Result {
     [CCode (array_length = false)]
@@ -118,6 +143,7 @@ namespace Memcached {
     public uint64 cas ();
   }
 
+  // return.h
   [CCode (cname = "memcached_return_t", cprefix = "MEMCACHED_", lower_case_cprefix = "memcached_")]
   public enum ReturnCode {
     SUCCESS,
@@ -170,5 +196,30 @@ namespace Memcached {
     public bool success ();
     public bool failed ();
     public bool fatal ();
+  }
+
+  // parse.h
+  public Memcached.ServerList servers_parse (string server_strings);
+
+  // server.h
+  [Compact, CCode (cname = "memcached_instance_st", has_type_id = false, lower_case_cprefix = "memcached_server_")]
+  public class Instance {
+    public uint32 response_count ();
+    public string name ();
+    public in_port_t port ();
+    public in_port_t srcport ();
+    public void next_retry (time_t absolute_time);
+    public string type ();
+    public uint8 major_version ();
+    public uint8 minor_version ();
+    public uint8 micro_version ();
+  }
+
+  [CCode (cname = "memcached_server_list_st", has_type_id = false)]
+  [SimpleType]
+  public struct ServerList {
+    public Memcached.ServerList append (string hostname, in_port_t port, out Memcached.ReturnCode error);
+    public Memcached.ServerList append_with_weight (string hostname, in_port_t port, uint32 weight, out Memcached.ReturnCode error);
+    public uint32 count ();
   }
 }
