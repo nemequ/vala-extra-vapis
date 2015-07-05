@@ -66,6 +66,13 @@ namespace Memcached {
     public Memcached.ReturnCode @delete ([CCode (array_length_type = "size_t")] uint8[] key, time_t expiration);
     public Memcached.ReturnCode delete_by_key ([CCode (array_length_type = "size_t")] uint8[] group_key, [CCode (array_length_type = "size_t")] uint8[] key, time_t expiration);
 
+    // error.h
+    public unowned string error ();
+    public unowned string last_error_message ();
+    public void error_print ();
+    public Memcached.ReturnCode last_error ();
+    public int last_error_errno ();
+
     // exist.h
     public Memcached.ReturnCode exist ([CCode (array_length_type = "size_t")] uint8[] key);
     public Memcached.ReturnCode exist_by_key ([CCode (array_length_type = "size_t")] uint8[] group_key, [CCode (array_length_type = "size_t")] uint8[] key);
@@ -106,6 +113,9 @@ namespace Memcached {
     public Memcached.ReturnCode prepend_by_key ([CCode (array_length_type = "size_t")] uint8[] group_key, [CCode (array_length_type = "size_t")] uint8[] key, [CCode (array_length_type = "size_t")] uint8[] value, time_t expiration, uint32 flags);
     public Memcached.ReturnCode append_by_key ([CCode (array_length_type = "size_t")] uint8[] group_key, [CCode (array_length_type = "size_t")] uint8[] key, [CCode (array_length_type = "size_t")] uint8[] value, time_t expiration, uint32 flags);
     public Memcached.ReturnCode cas_by_key ([CCode (array_length_type = "size_t")] uint8[] group_key, [CCode (array_length_type = "size_t")] uint8[] key, [CCode (array_length_type = "size_t")] uint8[] value, time_t expiration, uint32 flags, uint64 cas);
+
+    // strerror.h
+    public unowned string strerror (Memcached.ReturnCode rc);
 
     // touch.h
     public Memcached.ReturnCode touch ([CCode (array_length_type = "size_t")] uint8[] key, time_t expiration, uint32 flags);
@@ -205,14 +215,18 @@ namespace Memcached {
   [Compact, CCode (cname = "memcached_instance_st", has_type_id = false, lower_case_cprefix = "memcached_server_")]
   public class Instance {
     public uint32 response_count ();
-    public string name ();
+    public unowned string name ();
     public in_port_t port ();
     public in_port_t srcport ();
     public void next_retry (time_t absolute_time);
-    public string type ();
+    public unowned string type ();
     public uint8 major_version ();
     public uint8 minor_version ();
     public uint8 micro_version ();
+
+    // error.h
+    public unowned string error ();
+    public Memcached.ReturnCode error_return ();
   }
 
   [CCode (cname = "memcached_server_list_st", has_type_id = false)]
