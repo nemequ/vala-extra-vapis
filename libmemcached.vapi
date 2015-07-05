@@ -85,8 +85,10 @@ namespace Memcached {
 
     // get.h
     [CCode (array_length_pos = 1.5, array_length_type = "size_t")]
-    public uint8[] get (uint8[] key, out uint32 flags, out Memcached.ReturnCode error);
+    public uint8[]? @get ([CCode (array_length_type = "size_t")] uint8[] key, out uint32 flags, out Memcached.ReturnCode error);
     public Memcached.ReturnCode mget ([CCode (array_length_type = "size_t", array_length_pos = 2.5)] uint8*[] keys, [CCode (array_length = false)] size_t[] keys_length);
+    [CCode (array_length_pos = 2.5, array_length_type = "size_t")]
+    public uint8[]? get_by_key ([CCode (array_length_type = "size_t")] uint8[] group_key, [CCode (array_length_type = "size_t")] uint8[] key, out uint32 flags, out Memcached.ReturnCode error);
 
     // server.h
     public Memcached.Instance server_by_key ([CCode (array_length_type = "size_t")] uint8[] key, out Memcached.ReturnCode error);
