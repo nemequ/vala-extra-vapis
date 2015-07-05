@@ -31,14 +31,14 @@ namespace Memcached {
   [IntegerType (rank = 6), CCode (cname = "in_port_t")]
   public struct in_port_t {}
 
-  [Compact, CCode (cname = "memcached_st", lower_case_cprefix = "memcached_")]
+  [Compact, CCode (cname = "memcached_st", has_type_id = false, lower_case_cprefix = "memcached_")]
   public class Context {
     // memcached.h
     public void servers_reset ();
     [CCode (cname = "memcached_create")]
     private static Memcached.Context _create (Memcached.Context? ptr = null);
     [CCode (cname = "memcached")]
-    public Context (string? str = null, size_t length = 0);
+    public Context ([CCode (array_length_type = "size_t")] uint8[]? str = null);
     public Memcached.ReturnCode reset ();
     public void reset_last_disconnected_server ();
     [CCode (cname = "_vala_memcached_clone")]
