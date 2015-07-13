@@ -93,15 +93,13 @@ namespace Memcached {
     // memcached.h
     public void servers_reset ();
     [CCode (cname = "memcached_create")]
-    private static Memcached.Context _create (Memcached.Context? ptr = null);
+    public Context (Memcached.Context? ptr = null);
     [CCode (cname = "memcached")]
-    public Context ([CCode (array_length_type = "size_t")] uint8[]? str = null);
+    public Context.from_configuration ([CCode (array_length_type = "size_t")] uint8[]? str = null);
     public Memcached.ReturnCode reset ();
     public void reset_last_disconnected_server ();
-    [CCode (cname = "_vala_memcached_clone")]
-    public Memcached.Context clone () {
-      return Memcached.Context._create (this);
-    }
+    [CCode (instance_pos = 2)]
+    public Memcached.Context clone (Memcached.Context? destination = null);
     public void set_user_data<T> (T data);
     public T get_user_data<T> ();
     public Memcached.ReturnCode push (Memcached.Context source);
@@ -269,6 +267,14 @@ namespace Memcached {
 
     // version.h
     public Memcached.ReturnCode version ();
+
+    public unowned Memcached.Context iterator () {
+      return this;
+    }
+    public Memcached.Result? next_value () {
+      Memcached.ReturnCode error;
+      return this.fetch_result (null, out error);
+    }
   }
 
   // type/analysis.h
@@ -474,6 +480,7 @@ namespace Memcached {
   }
 
   // parse.h
+  [Deprecated (since = "0.39", replacement = "Context.from_configuration")]
   public Memcached.ServerList servers_parse (string server_strings);
 
   // server.h
