@@ -49,12 +49,12 @@ namespace Markdown
 	public class Document
 	{
 		[CCode (cname = "mkd_in")]
-		public Document.from_in (Posix.FILE file, DocumentFlags flags);
+		public Document.from_in (GLib.FileStream file, DocumentFlags flags);
 		[CCode (cname = "mkd_string")]
 		public Document.from_string (uint8[] doc, DocumentFlags flags);
 
 		[CCode (cname = "gfm_in")]
-		public Document.from_gfm_in (Posix.FILE file, DocumentFlags flags);
+		public Document.from_gfm_in (GLib.FileStream file, DocumentFlags flags);
 		[CCode (cname = "gfm_string")]
 		public Document.from_gfm_string (uint8[] doc, DocumentFlags flags);
 
@@ -63,12 +63,12 @@ namespace Markdown
 		public bool compile (DocumentFlags flags);
 		public void cleanup ();
 
-		public int dump (Posix.FILE file, DocumentFlags flags, string title);
+		public int dump (GLib.FileStream file, DocumentFlags flags, string title);
 		[CCode (cname = "markdown")]
-		public int markdown (Posix.FILE file, DocumentFlags flags);
+		public int markdown (GLib.FileStream file, DocumentFlags flags);
 		public static int line (uint8[] buffer, out string @out, DocumentFlags flags);
 		public static void string_to_anchor<T> (uint8[] buffer, StringToAnchorCallback<T> sta, T @out, DocumentFlags flags);
-		public int xhtmlpage (DocumentFlags flags, Posix.FILE file);
+		public int xhtmlpage (DocumentFlags flags, GLib.FileStream file);
 
 		public string doc_title ();
 		public string doc_author ();
@@ -79,19 +79,19 @@ namespace Markdown
 		public int css (out string @out);
 		public static int xml (uint8[] buffer, out string @out);
 
-		public int generatehtml (Posix.FILE file);
-		public int generatetoc (Posix.FILE file);
-		public static int generatexml (uint8[] buffer, Posix.FILE file);
-		public int generatecss (Posix.FILE file);
-		public static int generateline (uint8[] buffer, Posix.FILE file, DocumentFlags flags);
+		public int generatehtml (GLib.FileStream file);
+		public int generatetoc (GLib.FileStream file);
+		public static int generatexml (uint8[] buffer, GLib.FileStream file);
+		public int generatecss (GLib.FileStream file);
+		public static int generateline (uint8[] buffer, GLib.FileStream file, DocumentFlags flags);
 
 		public void e_url (Callback callback);
 		public void e_flags (Callback callback);
 		public void e_free (FreeCallback callback);
 		public void e_data<T> (T user_data);
 
-		public static void mmiot_flags (Posix.FILE file, Document document, bool htmlplease);
-		public static void flags_are (Posix.FILE file, DocumentFlags flags, bool htmlplease);
+		public static void mmiot_flags (GLib.FileStream file, Document document, bool htmlplease);
+		public static void flags_are (GLib.FileStream file, DocumentFlags flags, bool htmlplease);
 
 		public void ref_prefix (string prefix);
 	}
