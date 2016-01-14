@@ -169,7 +169,7 @@ namespace OpenCV {
 		[CCode (cname = "cvSegmentImage", cheader_filename = "cvaux.h")]
 		public OpenCV.Sequence segment_image (OpenCV.Array dstarr, double canny_threshhold, double ffill_threshhold, OpenCV.Memory.Storage storage);
 		[CCode (cname = "cvConvert")]
-		public void convert (OpenCV.Array dst)
+		public void convert (OpenCV.Array dst);
 	}
 
 	[SimpleType, CCode (cname = "CvBox2D", has_type_id = false)]

@@ -376,8 +376,8 @@ namespace Proton {
 		public int accept (Proton.Tracker tracker, int flags);
 		public int reject (Proton.Tracker tracker, int flags);
 
-		public int outgoing { [CCode (cname = "pn_messenger_outgoing")] get; };
-		public int incoming { [CCode (cname = "pn_messenger_incoming")] get; };
+		public int outgoing { [CCode (cname = "pn_messenger_outgoing")] get; }
+		public int incoming { [CCode (cname = "pn_messenger_incoming")] get; }
 	}
 
 	[SimpleType, IntegerType (rank = 7)]

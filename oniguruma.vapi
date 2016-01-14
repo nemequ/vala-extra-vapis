@@ -170,8 +170,8 @@ namespace Oniguruma {
 		// public const OnigSyntaxType ONIG_SYNTAX_PERL;
 		// public const OnigSyntaxType ONIG_SYNTAX_PERL_NG;
 		// public const OnigSyntaxType ONIG_SYNTAX_RUBY;
-		[CCode (cname = "ONIG_SYNTAX_DEFAULT", cheader_filename = "oniguruma.h")]
-		public const OnigSyntaxType* DEFAULT;
+		//[CCode (cname = "ONIG_SYNTAX_DEFAULT", cheader_filename = "oniguruma.h")]
+		//public const OnigSyntaxType* DEFAULT;
 		
 		[CCode (cname = "onig_copy_syntax", cheader_filename = "oniguruma.h")]
 		public static void copy(OnigSyntaxType* to, OnigSyntaxType* from);
