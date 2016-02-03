@@ -43,6 +43,22 @@
 namespace FastCGI {
 
 	/**
+	 * Listening socket file number
+	 */
+	[CCode (cheader_filename = "fastcgi.h", cname = "FCGI_LISTENSOCK_FILENO")]
+	public const int LISTENSOCK_FILENO;
+
+	/**
+	 * Values for role component of FCGI_BeginRequestBody
+	 */
+	[CCode (cheader_filename = "fastcgi.h", cprefix = "FCGI_")]
+	public enum Role {
+		RESPONDER,
+		AUTHORIZER,
+		FILTER
+	}
+
+	/**
 	 * FastCGI's abstraction over a file I/O
 	 */
 	[CCode (cname = "FCGI_FILE", cheader_filename = "fcgi_stdio.h", free_function = "FCGI_pclose", has_type_id = false)]
@@ -344,7 +360,7 @@ namespace FastCGI {
 		public Stream @out;
 		[CCode (cname = "requestId")]
 		public int request_id;
-		public int role;
+		public Role role;
 
 		/* Don't use anything below here */
 		[CCode (cname = "ipcFd")]
@@ -353,6 +369,7 @@ namespace FastCGI {
 		public bool is_begin_processed;
 		[CCode (cname = "keepConnection")]
 		public bool keep_connection;
+		[CCode (cname = "appStatus")]
 		public int app_status;
 		[CCode (cname = "nWriters")]
 		public int number_of_writers;
