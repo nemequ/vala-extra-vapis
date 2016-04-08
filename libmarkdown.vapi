@@ -1,6 +1,5 @@
-/*
- * ->Copyright (C) 2007 David Loren Parsons.
- * All rights reserved.<-
+/* libmarkdown Vala Bindings
+ * Copyright 2016 Guillaume Poirier-Morency <guillaumepoiriermorency@gmail.com>
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
