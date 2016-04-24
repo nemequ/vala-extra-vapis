@@ -69,13 +69,13 @@ namespace Markdown
 		public static void string_to_anchor<T> (uint8[] buffer, StringToAnchorCallback<T> sta, T @out, DocumentFlags flags);
 		public int xhtmlpage (DocumentFlags flags, GLib.FileStream file);
 
-		public string doc_title ();
-		public string doc_author ();
-		public string doc_date ();
+		public unowned string doc_title ();
+		public unowned string doc_author ();
+		public unowned string doc_date ();
 
 		public int document (out unowned string text);
-		public int toc (out string @out);
-		public int css (out string @out);
+		public int toc (out unowned string @out);
+		public int css (out unowned string @out);
 		public static int xml (uint8[] buffer, out string @out);
 
 		public int generatehtml (GLib.FileStream file);
