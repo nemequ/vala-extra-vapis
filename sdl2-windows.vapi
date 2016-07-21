@@ -28,7 +28,7 @@ namespace SDL {
 	///
 	/// Windows
 	///
-	[CCode (cname = "IDirect3DDevice9", cheader = "d3d9.h")]
+	[CCode (cname = "IDirect3DDevice9", cheader_filename = "d3d9.h")]
 	[Compact]
 	public struct IDirect3DDevice9 {}
 
@@ -48,7 +48,7 @@ namespace SDL {
 	[CCode (cname = "SDL_WindowsMessageHook", has_target= true, delegate_target_pos = 0.0, cheader = "SDL2/SDL_system.h")]
 	public delegate void WindowsMessageHook (void* hWnd, uint message, uint64 w_param, int64 l_param);
 
-	[CCode (cname = "SDL_SetWindowsMessageHook", cheader = "SDL2/SDL_system.h") ]
+	[CCode (cname = "SDL_SetWindowsMessageHook", cheader_filename = "SDL2/SDL_system.h") ]
 	public static void set_windows_message_hook (WindowsMessageHook hook);
 
 }

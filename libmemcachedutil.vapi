@@ -3,11 +3,11 @@ namespace Memcached {
   public class Pool {
     [CCode (cname = "memcached_pool")]
     public Pool ([CCode (array_length_type = "size_t")] uint8[] option_string);
-    [Deprecated (since = "0.46", replacement = "Pool"), CCode (cname = "memcached_pool_create")]
+    [Version (deprecated = true, deprecated_since = "0.46", replacement = "Pool"), CCode (cname = "memcached_pool_create")]
     public Pool.from_context (Memcached.Context mmc, uint32 initial, uint32 max);
-    [Deprecated (since = "0.53", replacement = "fetch")]
+    [Version (deprecated = true, deprecated_since = "0.53", replacement = "fetch")]
     public unowned Memcached.Context pop (bool block, out Memcached.ReturnCode rc);
-    [Deprecated (since = "0.53", replacement = "release")]
+    [Version (deprecated = true, deprecated_since = "0.53", replacement = "release")]
     public Memcached.ReturnCode push (Memcached.Context mmc);
     public Memcached.ReturnCode release (Memcached.Context mmc);
     public unowned Memcached.Context fetch (Posix.timespec relative_time, out Memcached.ReturnCode rc);
