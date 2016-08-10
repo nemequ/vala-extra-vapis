@@ -22,17 +22,58 @@
 
 [CCode (cheader_filename = "augeas.h")]
 namespace Augeas {
+  /**
+   * Flags to influence the behaviour of Augeas
+   */
   [Flags]
   [CCode (cprefix = "AUG_")]
   public enum InitFlags {
     NONE,
+    /**
+    * Preserve originals of modified files with extension '.augsave'
+    */
     SAVE_BACKUP,
+    /**
+    * Save changes into a new file with extension '.augnew'
+    *
+    * Does not overwrite the original file
+    * and takes precedence over SAVE_BACKUP
+    */
     SAVE_NEWFILE,
+    /**
+    * Type check lenses
+    *
+    * Since it can be an expensive operation this is not done by default
+    */
     TYPE_CHECK,
+    /**
+    * Do not search the built in default directories for lenses
+    */
     NO_STDINC,
+    /**
+    * Make save a no-op process, just show what would have changed
+    */
     SAVE_NOOP,
+    /**
+    * Do not automatically load files associated with lenses on start up
+    */
     NO_LOAD,
-    NO_MODL_AUTOLOAD
+    /**
+    * Do not automatically load all lenses found in the search paths on start up
+    */
+    NO_MODL_AUTOLOAD,
+    /**
+    * Load span positions for nodes related to a file
+    */
+    ENABLE_SPAN,
+    /**
+    * Do not automatically close when encountering an error during start up
+    */
+    NO_ERR_CLOSE,
+    /**
+    * Output a message when a lens is loaded, used by 'augparse --trace'
+    */
+    TRACE_MODULE_LOADING
   }
 
   [CCode (cprefix= "AUG_")]
