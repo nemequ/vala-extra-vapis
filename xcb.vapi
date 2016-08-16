@@ -1661,7 +1661,7 @@ namespace Xcb {
 			}
 		}
 		private uint8 roots_len;
-		[Deprecated (since = "vala-0.26", replacement = "Xcb.Setup.screens")]
+		[Version (deprecated = true, deprecated_since = "vala-0.26", replacement = "Xcb.Setup.screens")]
 		public int roots_length ();
 		public ScreenIterator roots_iterator ();
 		public Screen[] screens {
@@ -2054,7 +2054,7 @@ namespace Xcb {
 		OWNER_GRAB_BUTTON
 	}
 
-	[Simple]
+	[SimpleType]
 	[CCode (cname = "xcb_format_t", has_type_id = false)]
 	public struct Format {
 		public uint8 depth;
@@ -2129,7 +2129,7 @@ namespace Xcb {
 				return res;
 			}
 		}
-		[Deprecated (since = "vala-0.26", replacement = "Xcb.Depth.visuals")]
+		[Version (deprecated = true, deprecated_since = "vala-0.26", replacement = "Xcb.Depth.visuals")]
 		public VisualTypeIterator visuals_iterator ();
 	}
 
@@ -2142,7 +2142,7 @@ namespace Xcb {
 		public static void next (ref DepthIterator iter);
 	}
 
-	[Deprecated (since = "vala-0.26", replacement = "Xcb.Depth.visuals")]
+	[Version (deprecated = true, deprecated_since = "vala-0.26", replacement = "Xcb.Depth.visuals")]
 	[SimpleType]
 	[CCode (cname = "xcb_visualtype_iterator_t", has_type_id = false)]
 	public struct VisualTypeIterator {
@@ -2152,11 +2152,11 @@ namespace Xcb {
 		public static void next (ref VisualTypeIterator iter);
 	}
 
-	[Deprecated (since = "vala-0.14", replacement = "Xcb.Connection")]
+	[Version (deprecated = true, deprecated_since = "vala-0.14", replacement = "Xcb.Connection")]
 	public Connection connect (string? display = null, out int screen = null);
-	[Deprecated (since = "vala-0.14", replacement = "Xcb.Connection.create_window")]
+	[Version (deprecated = true, deprecated_since = "vala-0.14", replacement = "Xcb.Connection.create_window")]
 	public VoidCookie create_window (Connection connection, uint8 depth, Window window, Window parent, int16 x, int16 y, uint16 width, uint16 height, uint16 border_width, uint16 _class, VisualID visual, uint32 value_mask, [CCode (array_length = false)] uint32[] value_list);
-	[Deprecated (since = "vala-0.14", replacement = "Xcb.Connection.map_window")]
+	[Version (deprecated = true, deprecated_since = "vala-0.14", replacement = "Xcb.Connection.map_window")]
 	public VoidCookie map_window (Connection connection, Window window);
 
 	[CCode (cname = "xcb_point_t", has_type_id = false)]

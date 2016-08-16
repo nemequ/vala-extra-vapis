@@ -1,0 +1,16 @@
+dist: trusty
+
+language: c
+
+compiler:
+    - gcc
+
+before_install:
+    - sudo add-apt-repository --yes ppa:vala-team
+    - sudo apt-get update --quiet
+    - sudo apt-get install --yes valac
+
+script:
+    - echo 'public int main (string[] args) { return 0; }' > test.vala
+    - valac $(ls | grep -P '(?<!cairosdl)\.vapi$' | sed 's/cairosdl.vapi//' | sed 's/\.vapi$//' | sed 's/^/--pkg=/') --vapidir=. test.vala
+    - valac --pkg=cairosdl --vapidir=. test.vala

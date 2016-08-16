@@ -28,7 +28,7 @@ namespace SDL {
 	///
 	/// Windows
 	///
-	[CCode (cname="IDirect3DDevice9", cheader="d3d9.h")]
+	[CCode (cname="IDirect3DDevice9", cheader_filename="d3d9.h")]
 	[Compact]
 	public struct IDirect3DDevice9 {}
 	

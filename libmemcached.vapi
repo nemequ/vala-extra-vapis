@@ -193,7 +193,7 @@ namespace Memcached {
     [CCode (array_length_pos = 2.5, array_length_type = "size_t")]
     public uint8[]? get_by_key ([CCode (array_length_type = "size_t")] uint8[] group_key, [CCode (array_length_type = "size_t")] uint8[] key, out uint32 flags, out Memcached.ReturnCode error);
     public Memcached.ReturnCode mget_by_key ([CCode (array_length_type = "size_t")] uint8[] group_key, [CCode (array_length_type = "size_t", array_length_pos = 3.5)] uint8*[] keys, [CCode (array_length = false)] size_t[] keys_length);
-    [Deprecated (since = "0.50", replacement = "fetch_result"), CCode (array_length_pos = 1.5, array_length_type = "size_t")]
+    [Version (deprecated = true, deprecated_since = "0.50", replacement = "fetch_result"), CCode (array_length_pos = 1.5, array_length_type = "size_t")]
     public uint8[]? fetch ([CCode (array_length_type = "size_t")] uint8[] key, out uint32 flags, out Memcached.ReturnCode error);
     public Memcached.Result? fetch_result (Memcached.Result? result, out Memcached.ReturnCode error);
     [CCode (cname = "memcached_mget_execute")]
@@ -492,7 +492,7 @@ namespace Memcached {
   }
 
   // parse.h
-  [Deprecated (since = "0.39", replacement = "Context.from_configuration")]
+  [Version (deprecated = true, deprecated_since = "0.39", replacement = "Context.from_configuration")]
   public Memcached.ServerList servers_parse (string server_strings);
 
   // server.h
