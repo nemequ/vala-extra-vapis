@@ -263,9 +263,11 @@ namespace MessagePack
 	public struct Unpacked
 	{
 		MessagePack.Object data;
-		MessagePack.Zone release_zone ();
+		[CCode (cname = "msgpack_unpacked_init")]
+		public Unpacked ();
+		public MessagePack.Zone release_zone ();
 		[CCode (cname = "msgpack_unpack_next")]
-		public MessagePack.UnpackReturn next ([CCode (array_length_type = "size_t")] uint8[] data, out size_t off);
+		public MessagePack.UnpackReturn next ([CCode (array_length_type = "size_t")] uint8[] data, out size_t? off = null);
 	}
 
 	public const size_t UNPACKER_INIT_BUFFER_SIZE;
@@ -287,9 +289,10 @@ namespace MessagePack
 			return buf;
 		}
 		public size_t buffer_capacity ();
+		public void buffer_consumed (size_t size);
 		public UnpackReturn next (out MessagePack.Unpacked pac);
 		public int execute ();
-		public MessagePack.Object data ();
+		public unowned MessagePack.Object data ();
 		public MessagePack.Zone release_zone ();
 		public void reset_zone ();
 		public void reset ();
