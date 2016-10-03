@@ -131,6 +131,8 @@ namespace Columbus {
 
         /**
          * Returns the calculated relevancy of the match with number i.
+         * HERE BE DRAGONS: the c-api is broken here. the bug is known
+         * details at: https://bugs.launchpad.net/libcolumbus/+bug/1622424
          */
         public double get_relevancy(size_t i);
     }
