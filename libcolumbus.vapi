@@ -28,21 +28,21 @@ namespace Columbus {
     /**
      * Used to label fields in {@link Columbus.Document}s
      */
-    class Word {
+    public class Word {
         /**
          * Creates a new Word. Supply the name as string parameter.
          */
-        public Word(string utf8_word);
+        public Word (string utf8_word);
 
         /**
          * Returns the size of the given word
          */
-        public size_t length();
+        public size_t length ();
 
         /**
          * Reads the stored string into the supplied buffer
          */
-        public void as_utf8(uint8[] buffer);
+        public void as_utf8 (uint8[] buffer);
     }
 
     [Compact, CCode (cname="ColDocument", free_function="col_document_delete")]
@@ -50,22 +50,22 @@ namespace Columbus {
      * A document is a collection of one or more text-fields, labelled
      * with one {@link Columbus.Word} each.
      */
-    class Document {
+    public class Document {
         /**
          * Creates a Document with the given (unique) id.
          */
-        public Document(int64 id);
+        public Document (int64 id);
 
         /**
          * Returns this document's id
          */
-        public int64 get_id();
+        public int64 get_id ();
 
         /**
          * Assings some text to this document and labels it with
          * the given field_name
          */
-        public void add_text(Word field_name, string text_as_utf8);
+        public void add_text (Word field_name, string text_as_utf8);
     }
 
     [Compact, CCode (cname="ColMatcher", free_function="col_matcher_delete")]
@@ -73,35 +73,35 @@ namespace Columbus {
      * The matcher class let's you execute queries against indexed
      * data.
      */
-    class Matcher {
+    public class Matcher {
         /**
          * Creates a new Matcher
          */
-        public Matcher();
+        public Matcher ();
 
         /**
          * Indexes the supplied Corpus
          */
-        public void index(Corpus c);
+        public void index (Corpus c);
 
         /**
          * Executes a query against the index data with
          * the search term supplied as the first parameter
          * Returns a MatchResults object.
          */
-        public MatchResults match(string query_as_utf8);
+        public MatchResults match (string query_as_utf8);
 
         /**
          * Returns Error Values
          * TODO: refine docstring
          */
-        public ErrorValues get_error_values();
+        public ErrorValues get_error_values ();
 
         /**
          * Returns Index weights
          * TODO: refine docstring
          */
-        public IndexWeights get_index_weights();
+        public IndexWeights get_index_weights ();
     }
 
     [Compact, CCode (cname="ColMatchResults", free_function="col_match_results_delete")]
@@ -110,48 +110,48 @@ namespace Columbus {
      * has been executed. Each potential matchresult is enumerated
      * from 0 to n.
      */
-    class MatchResults {
+    public class MatchResults {
         /**
          * Creates a new MatchResults object
          */
-        public MatchResults();
+        public MatchResults ();
 
         /**
          * Returns the size of the MatchResults. Use it to iterate
          * over the searchresults together with the methods {@link MatchResults.get_id}
          * and {@link MatchResults.get_relevancy}
          */
-        public size_t size();
+        public size_t size ();
 
         /**
          * Returns the id of the Document related to match with the
          * number i.
          */
-        public int64 get_id(size_t i);
+        public int64 get_id (size_t i);
 
         /**
          * Returns the calculated relevancy of the match with number i.
          * HERE BE DRAGONS: the c-api is broken here. the bug is known
          * details at: https://bugs.launchpad.net/libcolumbus/+bug/1622424
          */
-        public double get_relevancy(size_t i);
+        public double get_relevancy (size_t i);
     }
 
     [Compact, CCode (cname="ColCorpus", free_function="col_corpus_delete")]
     /**
      * A corpus is a collection of documents that are to be indexed together
      */
-    class Corpus {
+    public class Corpus {
         /**
          * Creates a new Corpus
          */
-        public Corpus();
+        public Corpus ();
 
         /**
          * Adds the given document to the Corpus in order to make
          * it indexable
          */
-        public void add_document(Document d);
+        public void add_document (Document d);
     }
 
     /*
@@ -171,40 +171,40 @@ namespace Columbus {
      * You cannot access this class directly. Access it though
      * {@link Columbus.Matcher.get_index_weights()}
      */
-    class IndexWeights {
+    public class IndexWeights {
         /**
          * Set the weight of a specific word (name of a field in a) {@link Columbus.Document}
          */
-        public void set_weight(Word field, double new_weight);
+        public void set_weight (Word field, double new_weight);
 
         /**
          * Returns the current weight of the given field.
          */
-        public double get_weight(Word field);
+        public double get_weight (Word field);
     }
 
-    [Compact, CCode(cname="ColErrorValues", free_function="")]
+    [Compact, CCode(cname="struct ColErrorValues")]
     /**
      * This is your interface to adjust the error-checking-algorithms of
      * a {@link Columbus.Matcher}.
      */
-    class ErrorValues {
+    public struct ErrorValues {
         /**
          * Tells the matcher to take accent-errors and keyboard-errors
          * into account.
          *
          * An accent error is a non matching accent on a letter. E.g. when
-         * someone searched for "pate" but actually meant to find "paté" which
-         * is a pretty delicious french product btw.
+         * someone searched for "pâte" but actually meant to find "pâté" (which
+         * is pretty delicious french food btw)
          * A keyboard error is, when some wanted to type a "J" and instead typed
          * a "K". Those two are directly beneath each other on your standard
          * QWERTY/QWERTZ keyboard.
          */
-        public void add_standard_errors();
+        public void add_standard_errors ();
 
         /**
          * Attempt to scan for substrings instead of full-word matching
          */
-        public void set_substring_mode();
+        public void set_substring_mode ();
     }
 }
