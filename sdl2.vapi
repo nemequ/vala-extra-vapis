@@ -79,7 +79,7 @@ namespace SDL {
 	 *
 	 * If you want to initialize subsystems separately you would call:
 	 *
-	 * { {{
+	 * {{{
 	 * SDL.init (0);
 	 * }}}
 	 *
@@ -113,18 +113,18 @@ namespace SDL {
 	 * Use this function to return a mask of the specified subsystems which have previously been initialized.
 	 *
 	 * Examples:
-	 * { {{
+	 * {{{
 	 * // Get init data on all the subsystems
 	 * uint32 subsystem_init = SDL.get_initialized (SDL.InitFlag.EVERYTHING);
 	 * if (subsystem_init & SDL.InitFlag.VIDEO)
 	 *   //Video is initalized
 	 * }}}
-	 * { {{
+	 * {{{
 	 * // Just check for one specific subsystem
 	 * if (SDL.get_initialized (SDL.InitFlag.VIDEO) != 0)
 	 *   //Video is initialized
 	 * }}}
-	 * { {{
+	 * {{{
 	 * // Check for two subsystems
 	 * uint32 mask = SDL.InitFlag.VIDEO | SDL.InitFlag.AUDIO;
 	 * if (SDL.get_initialized (mask) == mask)
@@ -672,7 +672,7 @@ namespace SDL {
 		 * TODO, WinRT: document SDL_HINT_WINRT_HANDLE_BACK_BUTTON need and use
 		 * For now, more details on why this is needed can be found at the
 		 * beginning of the following web page:
-		 * [[http://msdn.microsoft.com/en-us/library/windowsphone/develop/jj247550 (v = vs.105).aspx]]
+		 * [[http://msdn.microsoft.com/en-us/library/windowsphone/develop/jj247550%20(v%20=%20vs.105).aspx]]
 		 */
 		[Version (since = "2.0.3")]
 		[CCode (cname = "SDL_HINT_WINRT_HANDLE_BACK_BUTTON")]
@@ -2314,7 +2314,8 @@ namespace SDL {
 			uint uikit_framebuffer;
 
 			/**
-			 *the GL view's color Renderbuffer Object; it must be bound when {@link SDL.GL.swap_window} is called (>= SDL 2.0.4)*/
+			 *the GL view's color Renderbuffer Object; it must be bound when {@link SDL.GL.swap_window} is called (>= SDL 2.0.4)
+			 */
 			[Version (since = "2.0.4")]
 			[CCode (cname = "uikit.colorbuffer")]
 			uint uikit_colorbuffer;
