@@ -502,7 +502,7 @@ namespace GCrypt {
 
 	[CCode (lower_case_cname = "cipher_")]
 	namespace Cipher {
-		[CCode (cname = "enum gcry_cipher_algos", cprefix = "GCRY_CIPHER_")]
+		[CCode (cname = "enum gcry_cipher_algos", cprefix = "GCRY_CIPHER_", free_function = "gcry_cipher_close")]
 		public enum Algorithm {
 			NONE,
 			IDEA,
