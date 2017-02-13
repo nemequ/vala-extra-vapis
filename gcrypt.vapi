@@ -502,7 +502,7 @@ namespace GCrypt {
 
 	[CCode (lower_case_cname = "cipher_")]
 	namespace Cipher {
-		[CCode (cname = "enum gcry_cipher_algos", cprefix = "GCRY_CIPHER_", free_function = "gcry_cipher_close")]
+		[CCode (cname = "enum gcry_cipher_algos", cprefix = "GCRY_CIPHER_")]
 		public enum Algorithm {
 			NONE,
 			IDEA,
@@ -560,7 +560,7 @@ namespace GCrypt {
 			CBC_MAC   /* Enable CBC message auth. code (MAC). */
 		}
 		[Compact]
-		[CCode (cname = "gcry_cipher_hd_t", lower_case_cprefix = "gcry_cipher_")]
+		[CCode (cname = "gcry_cipher_hd_t", lower_case_cprefix = "gcry_cipher_", free_function = "gcry_cipher_close")]
 		public class Cipher {
 			public static Error open (out Cipher cipher, Algorithm algo, Mode mode, Flag flags);
 			public void close ();
