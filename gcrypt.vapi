@@ -619,10 +619,11 @@ namespace GCrypt {
 			public Error get_oid (uchar[] buffer);
 		}
 
-		[CCode (cname = "enum gcry_md_flags", cprefix = "GCRY_MD_FLAG")]
+		[CCode (cname = "enum gcry_md_flags", cprefix = "GCRY_MD_FLAG_")]
 		public enum Flag {
 			SECURE,
-			HMAC
+			HMAC,
+			BUGEMU1
 		}
 
 		public static Error open (out Hash hash, Algorithm algo, Flag flag);
