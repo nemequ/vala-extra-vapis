@@ -512,24 +512,30 @@ namespace GCrypt {
 			SAFER_SK128,
 			DES_SK,
 			AES,
+			AES128,
+			RIJNDAEL,
+			RIJNDAEL128,
 			AES192,
+			RIJNDAEL192,
 			AES256,
+			RIJNDAEL256,
 			TWOFISH,
-
+			TWOFISH128,
 			ARCFOUR,
 			DES,
-			TWOFISH128,
 			SERPENT128,
 			SERPENT192,
 			SERPENT256,
 			RFC2268_40,
 			RFC2268_128,
-
-			AES128,
-			RIJNDAEL,
-			RIJNDAEL128,
-			RIJNDAEL192,
-			RIJNDAEL256;
+			SEED,
+			CAMELLIA128,
+			CAMELLIA192,
+			CAMELLIA256,
+			SALSA20,
+			SALSA20R12,
+			GOST28147,
+			CHACHA20;
 
 			[CCode (cname = "gcry_cipher_algo_info")]
 			public Error info (ControlCommand what, ref uchar[] buffer);
@@ -543,13 +549,19 @@ namespace GCrypt {
 
 		[CCode (cname = "enum gcry_cipher_modes", cprefix = "GCRY_CIPHER_MODE_")]
 		public enum Mode {
-			NONE,   /* Not yet specified. */
-			ECB,    /* Electronic codebook. */
-			CFB,    /* Cipher feedback. */
-			CBC,    /* Cipher block chaining. */
-			STREAM, /* Used with stream ciphers. */
-			OFB,    /* Outer feedback. */
-			CTR     /* Counter. */
+			NONE, /* No mode specified */
+			ECB, /* Electronic Codebook */
+			CFB, /* Cipher Feedback */
+			CFB8, /* Cipher Feedback */
+			CBC, /* Cipher Block Chaining */
+			STREAM, /* Used with stream ciphers */
+			OFB, /* Output Feedback */
+			CTR, /* Counter */
+			AESWRAP,
+			CCM, /* Counter with CBC-MAC */
+			GCM, /* Galois/Counter Mode */
+			POLY1305,
+			OCB
 		}
 
 		[CCode (cname = "enum gcry_cipher_flags", cprefix = "GCRY_CIPHER_")]
@@ -587,23 +599,32 @@ namespace GCrypt {
 		[CCode (cname = "enum gcry_md_algos", cprefix = "GCRY_MD_")]
 		public enum Algorithm {
 			NONE,
-			MD5,
 			SHA1,
 			RMD160,
+			MD5,
+			MD4,
 			MD2,
 			TIGER,
+			TIGER1,
+			TIGER2,
 			HAVAL,
+			SHA224,
 			SHA256,
 			SHA384,
 			SHA512,
-			SHA224,
-			MD4,
+			SHA3_224,
+			SHA3_256,
+			SHA3_384,
+			SHA3_512,
+			SHAKE128,
+			SHAKE256,
 			CRC32,
 			CRC32_RFC1510,
 			CRC24_RFC2440,
 			WHIRLPOOL,
-			TIGER1,
-			TIGER2;
+			GOSTR3411_94,
+			STRIBOG256,
+			STRIBOG512;
 
 			[CCode (cname = "gcry_md_get_algo_dlen")]
 			public size_t get_digest_length ();
@@ -798,8 +819,8 @@ namespace GCrypt {
 			SIMPLE_S2K,
 			SALTED_S2K,
 			ITERSALTED_S2K,
-			PBKDF1,
-			PBKDF2
+			PBKDF2,
+			SCRYPT
 		}
 
 		public GCrypt.Error derive ([CCode (type = "const void*", array_length_type = "size_t")] uint8[] passphrasse, GCrypt.KeyDerivation.Algorithm algo, GCrypt.Hash.Algorithm subalgo, [CCode (type = "const void*", array_length_type = "size_t")] uint8[] salt, ulong iterations, [CCode (type = "void*", array_length_type = "size_t", array_length_pos = 5.5)] uint8[] keybuffer);
