@@ -819,6 +819,7 @@ namespace GCrypt {
 			SIMPLE_S2K,
 			SALTED_S2K,
 			ITERSALTED_S2K,
+			PBKDF1,
 			PBKDF2,
 			SCRYPT
 		}
