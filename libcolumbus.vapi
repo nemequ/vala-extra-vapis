@@ -24,7 +24,7 @@
 
 [CCode (lower_case_cprefix = "col_", cheader_filename = "columbus1/columbus.h")]
 namespace Columbus {
-    [Compact, CCode (cname="ColWord", free_function="col_word_delete")]
+    [Compact, CCode (cname = "ColWord", free_function = "col_word_delete")]
     /**
      * Used to label fields in {@link Columbus.Document}s
      */
@@ -45,7 +45,7 @@ namespace Columbus {
         public void as_utf8 (uint8[] buffer);
     }
 
-    [Compact, CCode (cname="ColDocument", free_function="col_document_delete")]
+    [Compact, CCode (cname = "ColDocument", free_function = "col_document_delete")]
     /**
      * A document is a collection of one or more text-fields, labelled
      * with one {@link Columbus.Word} each.
@@ -68,7 +68,7 @@ namespace Columbus {
         public void add_text (Word field_name, string text_as_utf8);
     }
 
-    [Compact, CCode (cname="ColMatcher", free_function="col_matcher_delete")]
+    [Compact, CCode (cname = "ColMatcher", free_function = "col_matcher_delete")]
     /**
      * The matcher class let's you execute queries against indexed
      * data.
@@ -102,7 +102,7 @@ namespace Columbus {
         public IndexWeights get_index_weights ();
     }
 
-    [Compact, CCode (cname="ColMatchResults", free_function="col_match_results_delete")]
+    [Compact, CCode (cname = "ColMatchResults", free_function = "col_match_results_delete")]
     /**
      * Represents the hits that occured when a query against an index
      * has been executed. Each potential matchresult is enumerated
@@ -135,7 +135,7 @@ namespace Columbus {
         public double get_relevancy (size_t i);
     }
 
-    [Compact, CCode (cname="ColCorpus", free_function="col_corpus_delete")]
+    [Compact, CCode (cname = "ColCorpus", free_function = "col_corpus_delete")]
     /**
      * A corpus is a collection of documents that are to be indexed together
      */
@@ -158,7 +158,7 @@ namespace Columbus {
      * not supply any unref/delete/destructor function, so I assume it gets
      * freed automatically when the corresponding matcher is being deleted.
      */
-    [Compact, CCode(cname="ColIndexWeights", free_function="")]
+    [Compact, CCode(cname = "ColIndexWeights", free_function = "")]
     /**
      * Used to manipulate the weight of the fields of documents.
      *
@@ -181,7 +181,7 @@ namespace Columbus {
         public double get_weight (Word field);
     }
 
-    [SimpleType, CCode(cname="ColErrorValues")]
+    [SimpleType, CCode(cname = "ColErrorValues")]
     /**
      * This is your interface to adjust the error-checking-algorithms of
      * a {@link Columbus.Matcher}.
