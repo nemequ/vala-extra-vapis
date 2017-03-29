@@ -92,14 +92,12 @@ namespace Columbus {
         public MatchResults match (string query_as_utf8);
 
         /**
-         * Returns Error Values
-         * TODO: refine docstring
+         * Returns the matcher's {@link ErrorValues} object
          */
         public ErrorValues get_error_values ();
 
         /**
-         * Returns Index weights
-         * TODO: refine docstring
+         * Returns the matcher's {@link IndexWeights} object
          */
         public IndexWeights get_index_weights ();
     }
