@@ -181,7 +181,7 @@ namespace Columbus {
         public double get_weight (Word field);
     }
 
-    [SimpleType, Compact, CCode(cname="ColErrorValues")]
+    [SimpleType, CCode(cname="ColErrorValues")]
     /**
      * This is your interface to adjust the error-checking-algorithms of
      * a {@link Columbus.Matcher}.
