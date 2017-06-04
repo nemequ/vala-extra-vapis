@@ -11,13 +11,13 @@
 
 [CCode (cprefix = "", lower_case_cprefix = "", cheader_filename = "shapefil.h")]
 namespace ShapeFil {
-	[CCode (cprefix = "", has_type_id = "0")]
+	[CCode (cprefix = "FT", has_type_id = false)]
 	public enum DBFFieldType {
-		FTString,
-		FTInteger,
-		FTDouble,
-		FTLogical,
-		FTInvalid
+		String,
+		Integer,
+		Double,
+		Logical,
+		Invalid
 	}
 
 	[Compact]
@@ -132,10 +132,8 @@ namespace ShapeFil {
 		public int panRecOffset;
 		public int panRecSize;
 		[CCode (array_length = false)]
-		[NoArrayLength]
 		public unowned double[] adBoundsMin;
 		[CCode (array_length = false)]
-		[NoArrayLength]
 		public unowned double[] adBoundsMax;
 		public int bUpdated;
 		public uint pabyRec;
@@ -148,7 +146,7 @@ namespace ShapeFil {
         [CCode (cname = "SHPCreateObject")]
         public SHPObject (int nSHPType, int nShapeId, int nParts, int panPartStart, int panPartType, int nVertices, double padfX, double padfY, double padfZ, double padfM);
         [CCode (cname = "SHPCreateSimpleObject")]
-        public SHPObject.Simple (int nSHPType, int nVertices, double padfX, double padfY, double padfZ);
+        public SHPObject.simple (int nSHPType, int nVertices, double padfX, double padfY, double padfZ);
 		public int nSHPType;
 		public int nShapeId;
 		public int nParts;
