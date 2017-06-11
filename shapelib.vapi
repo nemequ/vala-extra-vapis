@@ -1,4 +1,7 @@
-/* This library is free software; you can redistribute it and/or
+/* Shapelib Vala Bindings
+ * Copyright 2017 Andreas Strasser
+ *
+ * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
  * version 2.1 of the License, or (at your option) any later version.
@@ -10,7 +13,7 @@
 */
 
 [CCode (cprefix = "", lower_case_cprefix = "", cheader_filename = "shapefil.h")]
-namespace ShapeFil {
+namespace ShapeLib {
 	[CCode (cprefix = "FT", has_type_id = false)]
 	public enum DBFFieldType {
 		String,
@@ -34,15 +37,15 @@ namespace ShapeFil {
         	[CCode (cname = "DBFGetFieldIndex")]
         	public int get_field_index (string pszFieldName);
         	[CCode (cname = "DBFAddField")]
-        	public int add_field (string pszFieldName, ShapeFil.DBFFieldType eType, int nWidth, int nDecimals);
+        	public int add_field (string pszFieldName, ShapeLib.DBFFieldType eType, int nWidth, int nDecimals);
         	[CCode (cname = "DBFAddNativeFieldType")]
         	public int add_native_field_type (string pszFieldName, string chType, int nWidth, int nDecimals);
         	[CCode (cname = "DBFCloneEmpty")]
-        	public unowned ShapeFil.DBFHandle clone_empty (string pszFilename);
+        	public unowned ShapeLib.DBFHandle clone_empty (string pszFilename);
         	[CCode (cname = "DBFClose")]
         	public void close ();
         	[CCode (cname = "DBFGetFieldInfo")]
-        	public ShapeFil.DBFFieldType get_field_info (int iField, string pszFieldName, int pnWidth, int pnDecimals);
+        	public ShapeLib.DBFFieldType get_field_info (int iField, string pszFieldName, int pnWidth, int pnDecimals);
         	[CCode (cname = "DBFGetNativeFieldType")]
         	public unowned string get_native_field_type (int iField);
         	[CCode (cname = "DBFIsAttributeNULL")]
@@ -82,20 +85,34 @@ namespace ShapeFil {
 	[Compact]
 	public class DBFInfo {
 		public unowned GLib.FileStream fp;
-		public int nRecords;
-		public int nRecordLength;
-		public int nHeaderLength;
-		public int nFields;
-		public int panFieldOffset;
-		public int panFieldSize;
-		public int panFieldDecimals;
-		public unowned string pachFieldType;
-		public unowned string pszHeader;
-		public int nCurrentRecord;
-		public int bCurrentRecordModified;
-		public unowned string pszCurrentRecord;
-		public int bNoHeader;
-		public int bUpdated;
+       	[CCode (cname = "nRecords")]
+		public int n_records;
+       	[CCode (cname = "nRecordLength")]
+		public int n_Record_length;
+       	[CCode (cname = "nHeaderLength")]
+		public int n_header_length;
+       	[CCode (cname = "nFields")]
+		public int n_fields;
+       	[CCode (cname = "panFieldOffset")]
+		public int pan_field_offset;
+       	[CCode (cname = "panFieldSize")]
+		public int pan_field_size;
+       	[CCode (cname = "panFieldDecimals")]
+		public int pan_field_decimals;
+       	[CCode (cname = "pachFieldType")]
+		public unowned string pach_field_type;
+       	[CCode (cname = "pszHeader")]
+		public unowned string psz_header;
+       	[CCode (cname = "nCurrentRecord")]
+		public int n_current_record;
+       	[CCode (cname = "bCurrentRecordModified")]
+		public int b_current_record_modified;
+       	[CCode (cname = "pszCurrentRecord")]
+		public unowned string psz_current_record;
+       	[CCode (cname = "bNoHeader")]
+		public int b_no_header;
+       	[CCode (cname = "bUpdated")]
+		public int b_updated;
 	}
 
 	[Compact]
@@ -108,17 +125,17 @@ namespace ShapeFil {
         	[CCode (cname = "SHPClose")]
         	public void close ();
         	[CCode (cname = "SHPCreateTree")]
-        	public unowned ShapeFil.SHPTree create_tree (int nDimension, int nMaxDepth, double padfBoundsMin, double padfBoundsMax);
+        	public unowned ShapeLib.SHPTree create_tree (int nDimension, int nMaxDepth, double padfBoundsMin, double padfBoundsMax);
         	[CCode (cname = "SHPGetInfo")]
         	public void get_info (int pnEntities, int pnShapeType, double padfMinBound, double padfMaxBound);
         	[CCode (cname = "SHPReadObject")]
-        	public unowned ShapeFil.SHPObject read_object (int iShape);
+        	public unowned ShapeLib.SHPObject read_object (int iShape);
         	[CCode (cname = "SHPRewindObject")]
-        	public int rewind_object (ShapeFil.SHPObject psObject);
+        	public int rewind_object (ShapeLib.SHPObject psObject);
         	[CCode (cname = "SHPWriteHeader")]
-        	public void write_header (ShapeFil.SHPHandle hSHP);
+        	public void write_header (ShapeLib.SHPHandle hSHP);
         	[CCode (cname = "SHPWriteObject")]
-        	public int write_object (ShapeFil.SHPHandle hSHP, int iShape, ShapeFil.SHPObject psObject);
+        	public int write_object (ShapeLib.SHPHandle hSHP, int iShape, ShapeLib.SHPObject psObject);
 	}
 
 	[Compact]
@@ -141,11 +158,11 @@ namespace ShapeFil {
 	}
 
 	[Compact]
-	[CCode (cname = "SHPObject", cprefix = "SHP")]
+	[CCode (cname = "SHPObject", cprefix = "SHP", free_function = "SPHDestroyObject")]
   	public class SHPObject {
-        [CCode (cname = "SHPCreateObject")]
-        public SHPObject (int nSHPType, int nShapeId, int nParts, int panPartStart, int panPartType, int nVertices, double padfX, double padfY, double padfZ, double padfM);
-        [CCode (cname = "SHPCreateSimpleObject")]
+		[CCode (cname = "SHPCreateObject")]
+		public SHPObject (int nSHPType, int nShapeId, int nParts, int panPartStart, int panPartType, int nVertices, double padfX, double padfY, double padfZ, double padfM);
+		[CCode (cname = "SHPCreateSimpleObject")]
         public SHPObject.simple (int nSHPType, int nVertices, double padfX, double padfY, double padfZ);
 		public int nSHPType;
 		public int nShapeId;
@@ -166,24 +183,24 @@ namespace ShapeFil {
 		public double dfZMax;
 		public double dfMMax;
 		public int bMeasureIsUsed;
-        public void ComputeExtents ();
-        public void DestroyObject ();
+        [CCode (cname = "SHPComputeExtents")]
+        public void compute_extents ();
 	}
 
 	[Compact]
-	[CCode (cname = "SHPTree", cprefix = "SHP")]
+	[CCode (cname = "SHPTree", cprefix = "SHP", free_function = "SPHDestroyTree")]
 	public class SHPTree {
         [CCode (cname = "SHPReadTree")]
         public SHPTree (string pszFilename);
-		public unowned ShapeFil.SHPHandle hSHP;
+		public unowned ShapeLib.SHPHandle hSHP;
 		public int nMaxDepth;
 		public int nDimension;
 		public int nTotalCount;
-		public unowned ShapeFil.SHPTreeNode psRoot;
+		public unowned ShapeLib.SHPTreeNode psRoot;
         [CCode (cname = "SHPTreeAddObject")]
-        public int add_object (ShapeFil.SHPObject psObject);
+        public int add_object (ShapeLib.SHPObject psObject);
         [CCode (cname = "SHPTreeAddShapeId")]
-        public int add_shape_id (ShapeFil.SHPObject psObject);
+        public int add_shape_id (ShapeLib.SHPObject psObject);
         [CCode (cname = "SHPTreeFindLikelyShapes")]
         public int find_likely_shapes (double padfBoundsMin, double padfBoundsMax, int p4);
         [CCode (cname = "SHPTreeRemoveShapeId")]
@@ -192,8 +209,6 @@ namespace ShapeFil {
         public void trim_extra_nodes ();
         [CCode (cname = "SHPWriteTree")]
         public int write (string pszFilename);
-        [CCode (cname = "SHPDestroyTree")]
-        public void destroy ();
 	}
 	[Compact]
 	public class SHPTreeNode {
@@ -203,7 +218,7 @@ namespace ShapeFil {
 		public unowned double[] adfBoundsMax;
 		public int nShapeCount;
 		public int panShapeIds;
-		public unowned ShapeFil.SHPObject papsShapeObj;
+		public unowned ShapeLib.SHPObject papsShapeObj;
 		public int nSubNodes;
 		public void* apsSubNode;
 	}
