@@ -40,12 +40,6 @@ your source tree.
 ## Submitting Bindings For Inclusion
 
 If you have bindings which you would like to see housed in this
-repository, simply submit a bug to the "Bindings: Extra" component in
-Vala's bugzilla product:
+repository, simply submit an issue to Gitlab:
 
-  https://bugzilla.gnome.org/browse.cgi?product=vala
-
-Or, if you prefer to use GitHub, you can submit an issue or a pull
-request to our GitHub mirror:
-
-  https://github.com/nemequ/vala-extra-vapis/issues
+  https://gitlab.gnome.org/GNOME/vala-extra-vapis
