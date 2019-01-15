@@ -3573,7 +3573,7 @@ namespace SDL {
 			public unowned AudioFunc callback;
 		}// AudioSpec
 
-		[CCode (cname = "SDL_AudioFilter", instance_pos = 0.1, cheader_filename = "SDL2/SDL_audio.h")]
+		[CCode (cname = "SDL_AudioFilter", has_target = false, cheader_filename = "SDL2/SDL_audio.h")]
 		public delegate void AudioFilter (AudioConverter cvt, AudioFormat format);
 
 		[CCode (cname = "SDL_AudioCVT", cheader_filename = "SDL2/SDL_audio.h")]

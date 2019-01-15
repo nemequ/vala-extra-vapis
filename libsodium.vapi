@@ -29,7 +29,7 @@ namespace Sodium {
   [CCode (lower_case_cprefix = "randombytes_")]
   namespace Random {
     [CCode (cname = "randombytes_random")]
-    public static uint32 random (uint32 upper_bound = 0xffffffff);
+    public static uint32 random (uint32 upper_bound = 0xffffffffU);
     public static void buffer (uint8[] buf);
     public static int close ();
     public static int stir ();
@@ -37,12 +37,12 @@ namespace Sodium {
 
   namespace Sign {
     [CCode (cname = "crypto_sign_PUBLICKEYBYTES")]
-    public static size_t PUBLIC_KEY_BYTES;
+    public const size_t PUBLIC_KEY_BYTES;
     [CCode (cname = "crypto_sign_SECRETKEYBYTES")]
-    public static size_t SECRET_KEY_BYTES;
+    public const size_t SECRET_KEY_BYTES;
 
     [CCode (cname = "crypto_sign_keypair")]
-    public static int key_pair (uint8[Sodium.Sign.PUBLIC_KEY_BYTES] public_key, uint8[Sodium.Sign.SECRET_KEY_BYTES] secret_key);
+    public static int key_pair (uint8 public_key[Sodium.Sign.PUBLIC_KEY_BYTES], uint8 secret_key[Sodium.Sign.SECRET_KEY_BYTES]);
   }
 
   public static int init ();

@@ -303,7 +303,7 @@ namespace CUPS {
 			public float density;
 			public float gamma;
 			[CCode (array_length = false)]
-			public float[][] matrix;
+			public float[,] matrix;
 		}
 
 		[CCode (cname = "ppd_cptype_t", cprefix = "PPD_CUSTOM_")]

@@ -733,7 +733,7 @@ public int GetSamplerInfo(Sampler          sampler,
 public Program CreateProgramWithSource(Context        context,
                                                uint           count,
                                                [CCode (array_length = false)]
-                                               char[][]       strings,
+                                               char[,]        strings,
                                                [CCode (array_length = false)]
                                                size_t[]       lengths,
                                                out ErrorCode  errcode_ret);

@@ -41,7 +41,7 @@ namespace Aubio {
     public Fvector(Uint length, Uint channels);
     public Uint channels;
     [CCode (array_length_cname = "length")] 
-    public Sample[][] data; /* length * channels */
+    public Sample[,] data; /* length * channels */
   }
    
   [Compact]

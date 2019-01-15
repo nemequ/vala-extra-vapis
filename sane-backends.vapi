@@ -256,11 +256,16 @@ namespace Sane
         public Status get_select_fd(out Int fd);
     }
 
+    [CCode(cname="SANE_MAX_USERNAME_LEN")]
+    public const int MAX_USERNAME_LEN;
+    [CCode(cname="SANE_MAX_PASSWORD_LEN")]
+    public const int MAX_PASSWORD_LEN;
+
     [CCode(cname="SANE_Authorization_Callback", has_target = false)]
     public delegate void AuthorizationCallback(
         StringConst resource,
-        [CCode(array_length_cexpr="SANE_MAX_USERNAME_LEN")]Char username[],
-        [CCode(array_length_cexpr="SANE_MAX_PASSWORD_LEN")]Char password[]
+        Char username[Sane.MAX_USERNAME_LEN],
+        Char password[Sane.MAX_PASSWORD_LEN]
     );
 
     public Status init(out Int version_code, AuthorizationCallback? authorize);

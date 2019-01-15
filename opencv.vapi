@@ -163,9 +163,9 @@ namespace OpenCV {
 		[CCode (cname = "cvFillConvexPoly")]
 		public void fill_convex_polygon (OpenCV.Point[] pts, OpenCV.Scalar color, int line_type = 8, int shift = 0);
 		[CCode (cname = "cvFillPoly")]
-		public void fill_polygon ([CCode (array_length = false)] OpenCV.Point[][] pts, [CCode (array_length = false)] int[] npts, int contours, OpenCV.Scalar color, int line_type = 8, int shift = 0);
+		public void fill_polygon ([CCode (array_length = false)] OpenCV.Point[,] pts, [CCode (array_length = false)] int[] npts, int contours, OpenCV.Scalar color, int line_type = 8, int shift = 0);
 		[CCode (cname = "cvPolyLine")]
-		public void poly_line ([CCode (array_length = false)] OpenCV.Point[][] pts, [CCode (array_length = false)] int[] npts, int contours, int is_closed, OpenCV.Scalar color, int thickness = 1, int line_type = 8, int shift = 0);
+		public void poly_line ([CCode (array_length = false)] OpenCV.Point[,] pts, [CCode (array_length = false)] int[] npts, int contours, int is_closed, OpenCV.Scalar color, int thickness = 1, int line_type = 8, int shift = 0);
 		[CCode (cname = "cvSegmentImage", cheader_filename = "cvaux.h")]
 		public OpenCV.Sequence segment_image (OpenCV.Array dstarr, double canny_threshhold, double ffill_threshhold, OpenCV.Memory.Storage storage);
 		[CCode (cname = "cvConvert")]
@@ -232,7 +232,7 @@ namespace OpenCV {
 		[CCode (array_length_cname = "num_states")]
 		public float[] transP;
 		[CCode (array_length = false)]
-		public float[][] obsProb;
+		public float[,] obsProb;
 		public OpenCV.EHMM.StateInfo u;
 
 		[Compact, CCode (cname = "CvEHMMState")]
