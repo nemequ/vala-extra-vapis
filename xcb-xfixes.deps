@@ -1,1 +1,3 @@
-xcb-xfixes
+xcb
+xcb-render
+xcb-shape

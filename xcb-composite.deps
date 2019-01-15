@@ -1,1 +1,2 @@
-xcb-composite
+xcb
+xcb-xfixes
