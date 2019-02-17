@@ -1,5 +1,6 @@
 /* CUPS Vala Bindings
  * Copyright 2009-2010 Evan Nemerson <evan@coeus-group.com>
+ * Copyright 2019 Patrick Gansterer <paroga@paroga.com>
  *
  * Permission is hereby granted, free of charge, to any person
  * obtaining a copy of this software and associated documentation
@@ -42,7 +43,7 @@ namespace CUPS {
 		LOCAL,
 		CLASS,
 		REMOTE,
-		BW,	
+		BW,
 		COLOR,
 		DUPLEX,
 		STAPLE,
@@ -68,10 +69,30 @@ namespace CUPS {
 		OPTIONS
 	}
 
+	namespace Format {
+		public const string AUTO;
+		public const string COMMAND;
+		public const string JPEG;
+		public const string PDF;
+		public const string POSTSCRIPT;
+		public const string RAW;
+		public const string TEXT;
+	}
+
+	[CCode (cprefix = "CUPS_WHICHJOBS_")]
+	public enum WhichJobs {
+		ALL,
+		ACTIVE,
+		COMPLETED
+	}
+
 	[CCode (cname = "cups_option_t", destroy_function = "")]
 	public struct Option {
 		public string name;
 		public string value;
+
+		[CCode (cname = "cupsFreeOptions")]
+		public static void free ([CCode (array_length_pos = 0.9)] Option[] options);
 	}
 
 	[CCode (cname = "cups_dest_t")]
@@ -82,11 +103,15 @@ namespace CUPS {
 		[CCode (array_length_cname = "num_options")]
 		public Option[] options;
 		[CCode (cname = "cupsFreeDests")]
-		public static void free (int num_dests, Destination * dests);
+		public static void free ([CCode (array_length_pos = 0.9)] Destination[] dests);
 		[CCode (cname = "cupsGetDest")]
-		public static unowned Destination? get_dest (string name, string? instance, [CCode (array_length_pos = 0.9)] Destination[] dests);
+		public static unowned Destination? get_dest (string? name, string? instance, [CCode (array_length_pos = 2.9)] Destination[] dests);
 		[CCode (cname = "cupsGetDests")]
 		public static int get_dests ([CCode (array_length = false)] out unowned Destination[] dests);
+
+		public unowned string get_option (string name) {
+			return CUPS.get_option(name, this.options);
+		}
 
 		public PPD.File get_ppd () {
 			return new PPD.File (CUPS.get_ppd (this.name));
@@ -97,6 +122,10 @@ namespace CUPS {
 		}
 	}
 
+	[CCode (cname = "cups_dinfo_t")]
+	public struct DestinationInfo {
+	}
+
 	[CCode (cname = "cups_job_t")]
 	public struct Job {
 		public int id;
@@ -104,20 +133,29 @@ namespace CUPS {
 		public string title;
 		public string user;
 		public string format;
-		// public IPP.JobState state;
+		public IPP.JobState state;
 		public int size;
 		public int priority;
 		public time_t completed_time;
 		public time_t creation_time;
 		public time_t processing_time;
+
+		[CCode (cname = "cupsFreeJobs")]
+		public static void free ([CCode (array_length_pos = 0.9)] Job[] jobs);
 	}
 
 	[CCode (cname = "cupsPrintFile")]
 	public int print_file (string printer, string filename, string title, [CCode (array_length_pos = 3.9)] Option[]? options);
+	[CCode (cname = "cupsCancelJob")]
+	public int cancel_job (string printer, int job_id);
 	[CCode (cname = "cupsGetDests")]
 	public int get_dests ([CCode (array_length = false)] out unowned Destination[] dests);
+	[CCode (cname = "cupsGetOption")]
+	public unowned string get_option (string name, [CCode (array_length_pos = 1.9)] Option[] options);
 	[CCode (cname = "cupsGetPPD")]
 	public unowned string get_ppd (string printer);
+	[CCode (cname = "cupsLastErrorString")]
+	public unowned string last_error_string ();
 	[CCode (cname = "cupsUser")]
 	public unowned string user ();
 	[CCode (cname = "cupsServer")]
@@ -822,6 +860,56 @@ namespace CUPS {
 			USERNAME
 		}
 
+		[CCode (cname = "http_status_t", cprefix = "HTTP_STATUS_")]
+		public enum Status {
+			ERROR,
+			NONE,
+			CONTINUE,
+			SWITCHING_PROTOCOLS,
+			OK,
+			CREATED,
+			ACCEPTED,
+			NOT_AUTHORITATIVE,
+			NO_CONTENT,
+			RESET_CONTENT,
+			PARTIAL_CONTENT,
+			MULTIPLE_CHOICES,
+			MOVED_PERMANENTLY,
+			FOUND,
+			SEE_OTHER,
+			NOT_MODIFIED,
+			USE_PROXY,
+			TEMPORARY_REDIRECT,
+			BAD_REQUEST,
+			UNAUTHORIZED,
+			PAYMENT_REQUIRED,
+			FORBIDDEN,
+			NOT_FOUND,
+			METHOD_NOT_ALLOWED,
+			NOT_ACCEPTABLE,
+			PROXY_AUTHENTICATION,
+			REQUEST_TIMEOUT,
+			CONFLICT,
+			GONE,
+			LENGTH_REQUIRED,
+			PRECONDITION,
+			REQUEST_TOO_LARGE,
+			URI_TOO_LONG,
+			UNSUPPORTED_MEDIATYPE,
+			REQUESTED_RANGE,
+			EXPECTATION_FAILED,
+			UPGRADE_REQUIRED,
+			SERVER_ERROR,
+			NOT_IMPLEMENTED,
+			BAD_GATEWAY,
+			SERVICE_UNAVAILABLE,
+			GATEWAY_TIMEOUT,
+			NOT_SUPPORTED,
+			CUPS_AUTHORIZATION_CANCELED,
+			CUPS_PKI_ERROR,
+			CUPS_WEBIF_DISABLED
+		}
+
 		[CCode (cname = "httpAssembleURIf", sentinel = ""), PrintfFormat]
 		public static URIStatus assemble_uri_f (URICoding encoding, char[] uri, string scheme, string? username, string host, int port, ...);
 
@@ -835,6 +923,39 @@ namespace CUPS {
 
 			public IPP.IPP do_request (owned IPP.IPP request, string resource);
 			public IPP.IPP do_file_request (owned IPP.IPP request, string resource, string filename);
+
+			[CCode (cname = "cupsCancelDestJob")]
+			public int cancel_dest_job (Destination dest, int job_id);
+
+			[CCode (cname = "cupsCopyDestInfo")]
+			public unowned DestinationInfo* copy_dest_info (Destination dest);
+
+			[CCode (cname = "cupsCreateJob")]
+			public int create_job (string printername, string title, [CCode (array_length_pos = 4.9)] Option[]? options);
+
+			[CCode (cname = "cupsCreateDestJob")]
+			public int create_dest_job (Destination dest, DestinationInfo* info, out int job_id, string title, [CCode (array_length_pos = 4.9)] Option[]? options);
+
+			[CCode (cname = "cupsFinishDestDocument")]
+			public IPP.Status finish_dest_document (Destination dest, DestinationInfo* info);
+
+			[CCode (cname = "cupsFinishDocument")]
+			public IPP.Status finish_document (string printername);
+
+			[CCode (cname = "cupsGetDests2")]
+			public int get_dests ([CCode (array_length = false)] out unowned Destination[] dests);
+
+			[CCode (cname = "cupsGetJobs2")]
+			public int get_jobs ([CCode (array_length = false)] out unowned Job[] jobs, string? name, int myjobs, WhichJobs whichjobs);
+
+			[CCode (cname = "cupsStartDestDocument")]
+			public Status start_dest_document (Destination dest, DestinationInfo* info, int job_id, string docname, string format, [CCode (array_length_pos = 5.9)] Option[]? options, int last_document);
+
+			[CCode (cname = "cupsStartDocument")]
+			public Status start_document (string printername, int job_id, string docname, string format, int last_document);
+
+			[CCode (cname = "cupsWriteRequestData")]
+			public Status write_request_data ([CCode (array_length_pos = 1.9)] uint8[] buffer);
 		}
 	}
 }
